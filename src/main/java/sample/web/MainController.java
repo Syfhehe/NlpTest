@@ -10,17 +10,17 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @Controller
 public class MainController {
 
-	@RequestMapping(value = "/", method = RequestMethod.GET)
-	public String home(Map<String, Object> model) {
-		model.put("message", "Hello World");
-		model.put("title", "Hello Home");
-		model.put("date", new Date());
-		return "home";
-	}
+  @RequestMapping(value = "/", method = RequestMethod.GET)
+  public String home(Map<String, Object> model) {
+    model.put("message", "Hello World");
+    model.put("title", "Hello Home");
+    model.put("date", new Date());
+    return "home";
+  }
 
-	@RequestMapping("/foo")
-	public String foo() {
-		throw new RuntimeException("Expected exception in controller");
-	}
+  @RequestMapping("/foo")
+  public String foo() {
+    throw new RuntimeException("Expected exception in controller");
+  }
 
 }

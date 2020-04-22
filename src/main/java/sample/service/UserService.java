@@ -11,21 +11,21 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserService {
 
-	private static final Logger logger = LoggerFactory.getLogger(UserService.class);
+  private static final Logger logger = LoggerFactory.getLogger(UserService.class);
 
-	/**
-	 * Get current userName.
-	 */
-	public String getCurrentUsername() {
-		logger.debug("Start getting current username.");
-		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		if (principal instanceof UserDetails) {
-			return ((UserDetails) principal).getUsername();
-		}
-		if (principal instanceof Principal) {
-			return ((Principal) principal).getName();
-		}
-		return String.valueOf(principal);
-	}
+  /**
+   * Get current userName.
+   */
+  public String getCurrentUsername() {
+    logger.debug("Start getting current username.");
+    Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    if (principal instanceof UserDetails) {
+      return ((UserDetails) principal).getUsername();
+    }
+    if (principal instanceof Principal) {
+      return ((Principal) principal).getName();
+    }
+    return String.valueOf(principal);
+  }
 
 }

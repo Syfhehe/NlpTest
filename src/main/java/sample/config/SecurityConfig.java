@@ -19,27 +19,27 @@ import sample.service.TestingUserDetailService;
 @ComponentScan("sample.service")
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-	@Autowired
-	private TestingUserDetailService userDetailService;
+  @Autowired
+  private TestingUserDetailService userDetailService;
 
-	@Override
-	protected void configure(HttpSecurity http) throws Exception {
-		http.authorizeRequests().antMatchers("/css/**", "/fonts/**", "/js/**").permitAll().anyRequest()
-				.fullyAuthenticated().and().formLogin().loginPage("/login").failureUrl("/login?error").permitAll().and()
-				.logout().permitAll();
-		http.csrf().disable();
-	}
+  @Override
+  protected void configure(HttpSecurity http) throws Exception {
+    http.authorizeRequests().antMatchers("/css/**", "/fonts/**", "/js/**").permitAll().anyRequest()
+        .fullyAuthenticated().and().formLogin().loginPage("/login").failureUrl("/login?error")
+        .permitAll().and().logout().permitAll();
+    http.csrf().disable();
+  }
 
-	@Override
-	public void configure(AuthenticationManagerBuilder auth) throws Exception {
-		DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-		authProvider.setPasswordEncoder(passwordEncoder());
-		authProvider.setUserDetailsService(userDetailService);
-		ReflectionSaltSource saltSource = new ReflectionSaltSource();
-		saltSource.setUserPropertyToUse("salt");
-		authProvider.setSaltSource(saltSource);
-		auth.authenticationProvider(authProvider);
-	}
+  @Override
+  public void configure(AuthenticationManagerBuilder auth) throws Exception {
+    DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+    authProvider.setPasswordEncoder(passwordEncoder());
+    authProvider.setUserDetailsService(userDetailService);
+    ReflectionSaltSource saltSource = new ReflectionSaltSource();
+    saltSource.setUserPropertyToUse("salt");
+    authProvider.setSaltSource(saltSource);
+    auth.authenticationProvider(authProvider);
+  }
 
 //  @Override
 //  public void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -48,9 +48,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //              .roles("USER");
 //  }
 
-	@Bean
-	public Md5PasswordEncoder passwordEncoder() {
-		return new Md5PasswordEncoder();
-	}
+  @Bean
+  public Md5PasswordEncoder passwordEncoder() {
+    return new Md5PasswordEncoder();
+  }
 
 }

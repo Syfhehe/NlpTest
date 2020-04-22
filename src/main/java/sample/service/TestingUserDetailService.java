@@ -19,22 +19,23 @@ import sample.repository.UserRepository;
 @Service
 public class TestingUserDetailService implements UserDetailsService {
 
-	private static final Logger logger = LoggerFactory.getLogger(TestingUserDetailService.class);
+  private static final Logger logger = LoggerFactory.getLogger(TestingUserDetailService.class);
 
-	@Autowired
-	private UserRepository userRepository;
+  @Autowired
+  private UserRepository userRepository;
 
-	public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
-		logger.debug("Load user by username: " + userName);
-		List<SimpleGrantedAuthority> authorities = new ArrayList<SimpleGrantedAuthority>();
-		User user = userRepository.findByUserName(userName);
-		if (user == null) {
-			logger.error("User not found");
-			throw new UsernameNotFoundException("User not found");
-		}
+  public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
+    logger.debug("Load user by username: " + userName);
+    List<SimpleGrantedAuthority> authorities = new ArrayList<SimpleGrantedAuthority>();
+    User user = userRepository.findByUserName(userName);
+    if (user == null) {
+      logger.error("User not found");
+      throw new UsernameNotFoundException("User not found");
+    }
 
-		authorities.add(new SimpleGrantedAuthority(user.getRole().toString()));
-		return new UserWithSalt(user.getUserName(), user.getUserName(), user.getPassword(), authorities);
-	}
+    authorities.add(new SimpleGrantedAuthority(user.getRole().toString()));
+    return new UserWithSalt(user.getUserName(), user.getUserName(), user.getPassword(),
+        authorities);
+  }
 
 }

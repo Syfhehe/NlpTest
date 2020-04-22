@@ -8,12 +8,12 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import sample.model.FileProperties;
 
 @SpringBootApplication
-@EnableConfigurationProperties({ FileProperties.class })
+@EnableConfigurationProperties({FileProperties.class})
 @EntityScan(value = "sample.model")
 public class WebApplication {
 
-	public static void main(String[] args) throws Exception {
-		new SpringApplicationBuilder(WebApplication.class).run(args);
-	}
+  public static void main(String[] args) throws Exception {
+    new SpringApplicationBuilder(WebApplication.class).run(args);
+  }
 
 }

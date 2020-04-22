@@ -20,49 +20,51 @@ import java.nio.file.StandardCopyOption;
 @Service
 public class FileService {
 
-	private Path fileStorageLocation;
+  private Path fileStorageLocation;
 
-	@Autowired
-	public FileService(FileProperties fileProperties) {
-		this.fileStorageLocation = Paths.get(fileProperties.getUploadDir()).toAbsolutePath().normalize();
-		try {
-			Files.createDirectories(this.fileStorageLocation);
-		} catch (Exception ex) {
-			throw new FileException("Could not create the directory where the uploaded files will be stored.", ex);
-		}
-	}
+  @Autowired
+  public FileService(FileProperties fileProperties) {
+    this.fileStorageLocation =
+        Paths.get(fileProperties.getUploadDir()).toAbsolutePath().normalize();
+    try {
+      Files.createDirectories(this.fileStorageLocation);
+    } catch (Exception ex) {
+      throw new FileException(
+          "Could not create the directory where the uploaded files will be stored.", ex);
+    }
+  }
 
-	public String storeFile(MultipartFile file) {
-		// Normalize file name
-		String fileName = StringUtils.cleanPath(file.getOriginalFilename());
+  public String storeFile(MultipartFile file) {
+    // Normalize file name
+    String fileName = StringUtils.cleanPath(file.getOriginalFilename());
 
-		try {
-			// Check if the file's name contains invalid characters
-			if (fileName.contains("..")) {
-				throw new FileException("Sorry! Filename contains invalid path sequence " + fileName);
-			}
+    try {
+      // Check if the file's name contains invalid characters
+      if (fileName.contains("..")) {
+        throw new FileException("Sorry! Filename contains invalid path sequence " + fileName);
+      }
 
-			// Copy file to the target location (Replacing existing file with the same name)
-			Path targetLocation = this.fileStorageLocation.resolve(fileName);
-			Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
+      // Copy file to the target location (Replacing existing file with the same name)
+      Path targetLocation = this.fileStorageLocation.resolve(fileName);
+      Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
 
-			return fileName;
-		} catch (IOException ex) {
-			throw new FileException("Could not store file " + fileName + ". Please try again!", ex);
-		}
-	}
+      return fileName;
+    } catch (IOException ex) {
+      throw new FileException("Could not store file " + fileName + ". Please try again!", ex);
+    }
+  }
 
-	public Resource loadFileAsResource(String fileName) {
-		try {
-			Path filePath = this.fileStorageLocation.resolve(fileName).normalize();
-			Resource resource = new UrlResource(filePath.toUri());
-			if (resource.exists()) {
-				return resource;
-			} else {
-				throw new FileException("File not found " + fileName);
-			}
-		} catch (MalformedURLException ex) {
-			throw new FileException("File not found " + fileName, ex);
-		}
-	}
+  public Resource loadFileAsResource(String fileName) {
+    try {
+      Path filePath = this.fileStorageLocation.resolve(fileName).normalize();
+      Resource resource = new UrlResource(filePath.toUri());
+      if (resource.exists()) {
+        return resource;
+      } else {
+        throw new FileException("File not found " + fileName);
+      }
+    } catch (MalformedURLException ex) {
+      throw new FileException("File not found " + fileName, ex);
+    }
+  }
 }
