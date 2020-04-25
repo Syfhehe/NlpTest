@@ -34,36 +34,6 @@ function uploadSingleFile(file) {
     xhr.send(formData);
 }
 
-function uploadMultipleFiles(files) {
-    var formData = new FormData();
-    for(var index = 0; index < files.length; index++) {
-        formData.append("files", files[index]);
-    }
-
-    var xhr = new XMLHttpRequest();
-    xhr.open("POST", "/uploadMultipleFiles");
-
-    xhr.onload = function() {
-        console.log(xhr.responseText);
-        var response = JSON.parse(xhr.responseText);
-        if(xhr.status == 200) {
-            multipleFileUploadError.style.display = "none";
-            var content = "<p>All Files Uploaded Successfully</p>";
-            for(var i = 0; i < response.length; i++) {
-                content += "<p>DownloadUrl : <a href='" + response[i].fileDownloadUri + "' target='_blank'>" + response[i].fileDownloadUri + "</a></p>";
-            }
-            multipleFileUploadSuccess.innerHTML = content;
-            multipleFileUploadSuccess.style.display = "block";
-        } else {
-            multipleFileUploadSuccess.style.display = "none";
-            multipleFileUploadError.innerHTML = (response && response.message) || "Some Error Occurred";
-        }
-    }
-
-    xhr.send(formData);
-}
-
-
 singleUploadForm.addEventListener('submit', function(event){
     var files = singleFileUploadInput.files;
     if(files.length === 0) {

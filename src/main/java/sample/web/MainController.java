@@ -9,16 +9,21 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import sample.model.FileModel;
+import sample.repository.FileRepository;
 import sample.service.FileService;
 import sample.util.FileUtil;
 
 @Controller
 @ComponentScan("sample.service")
 public class MainController {
+	@Autowired
+	FileRepository fileRepository;
 	
 	@Autowired
 	private FileService fileService; 
@@ -50,5 +55,11 @@ public class MainController {
 	public String uploadPage() {
 		return "uploadPage";
 	}
+	
+    @DeleteMapping(value = "/file/{id}")
+    public void personDelete(@PathVariable("id") Long id) {
+    	fileRepository.delete(id);
+    }
+
 
 }
