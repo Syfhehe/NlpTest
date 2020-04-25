@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-<!-- required = "required" meta tags -->
+<!-- Required meta tags -->
 <meta charset="UTF-8"></meta>
 <meta http-equiv="X-UA-Compatible" content="IE=edge"></meta>
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, shrink-to-fit=no"></meta>
-<title>Spring Boot File Upload / Download Rest API Example</title>
+<title>敏感词设置</title>
 
 <!-- Bootstrap CSS -->
 </head>
@@ -17,43 +17,27 @@
 	<div th:replace="fragments/header :: header"></div>
 
 	<div class="container">
-
-		<div class="single-upload">
-			<h3>Upload Single File</h3>
-			<form id="singleUploadForm" name="singleUploadForm">
-				<input id="singleFileUploadInput" type="file" name="file"
-					class="file-input" required = "required" ></input>
-				<button type="submit" class="primary submit-btn">Submit</button>
-			</form>
-			<div class="upload-response">
-				<div id="singleFileUploadError"></div>
-				<div id="singleFileUploadSuccess"></div>
-			</div>
-		</div>
-		
 		<div>
 			<table class="table table-striped">
-				<h4>文件列表</h4>
+				<caption>文件列表</caption>
 				<thead>
 					<tr>
 						<th>序号</th>
-						<th>文件名</th>
-						<th>字数</th>
-						<th>累计隐私值</th>
+						<th>敏感词</th>
+						<th>隐私值</th>
 						<th>操作</th>
 					</tr>
 				</thead>
 				<tbody>
-					<tr th:each="fileMode,fileModeStat : ${fileModes}">
-						<td th:text="${fileModeStat.count}"></td>
-						<td th:text="${fileMode.fileName}"></td>
-						<td th:text="${fileMode.wordCount}"></td>
-						<td th:text="${fileMode.sensitiveValue}"></td>
+					<tr>
+						<td>1</td>
+						<td>敏感词</td>
+						<td>0.8</td>
 						<td><button type="button" class="btn btn-primary  btn-sm"
 								style="margin-right: 15px;">访问</button>
 							<button type="button" class="btn btn-primary  btn-sm"
 								style="margin-right: 15px;">删除</button></td>
-					</tr>
+					</tr>					
 				</tbody>
 			</table>
 		</div>
