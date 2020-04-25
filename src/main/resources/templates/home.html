@@ -6,6 +6,8 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge"></meta>
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, shrink-to-fit=no"></meta>
+<link href="css/main.css" rel="stylesheet"></link>
+
 <title>Spring Boot File Upload / Download Rest API Example</title>
 
 <!-- Bootstrap CSS -->
@@ -18,22 +20,11 @@
 
 	<div class="container">
 
-		<div class="single-upload">
-			<h3>Upload Single File</h3>
-			<form id="singleUploadForm" name="singleUploadForm">
-				<input id="singleFileUploadInput" type="file" name="file"
-					class="file-input" required = "required" ></input>
-				<button type="submit" class="primary submit-btn">Submit</button>
-			</form>
-			<div class="upload-response">
-				<div id="singleFileUploadError"></div>
-				<div id="singleFileUploadSuccess"></div>
-			</div>
-		</div>
-		
+
+
 		<div>
 			<table class="table table-striped">
-				<h4>文件列表</h4>
+				<h3>文件列表</h3>
 				<thead>
 					<tr>
 						<th>序号</th>
@@ -57,8 +48,26 @@
 				</tbody>
 			</table>
 		</div>
+		<hr></hr>
+
+		<div class="single-upload">
+			<h3>文件上传</h3>
+			<form id="singleUploadForm" name="singleUploadForm">
+				<input id="singleFileUploadInput" type="file" name="file"
+					class="file-input" required="required"></input>
+
+				<button type="submit" class="primary submit-btn">Submit</button>
+			</form>
+			<div class="upload-response">
+				<div id="singleFileUploadError"></div>
+				<div id="singleFileUploadSuccess"></div>
+			</div>
+		</div>
+		
 		<div th:replace="fragments/footer :: footer"></div>
 	</div>
+	
+	<script src="/js/main.js"></script>
 
 </body>
 </html>

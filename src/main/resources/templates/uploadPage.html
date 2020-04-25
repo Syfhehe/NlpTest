@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html lang="zh-cn">
 <head>
-    <!-- Required meta tags -->
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- required = "required" meta tags -->
+    <meta charset="UTF-8"></meta>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"></meta>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"></meta>
     <title>Spring Boot File Upload / Download Rest API Example</title>
 
     <!-- Bootstrap CSS -->
-    <link href="/css/main.css" rel="stylesheet"/>
+    <link href="/css/main.css" rel="stylesheet"></link>
 </head>
 <body>
 
@@ -24,7 +24,7 @@
         <div class="single-upload">
             <h3>Upload Single File</h3>
             <form id="singleUploadForm" name="singleUploadForm">
-                <input id="singleFileUploadInput" type="file" name="file" class="file-input" required/>
+                <input id="singleFileUploadInput" type="file" name="file" class="file-input" required = "required"></input>
                 <button type="submit" class="primary submit-btn">Submit</button>
             </form>
             <div class="upload-response">
@@ -35,7 +35,7 @@
         <div class="multiple-upload">
             <h3>Upload Multiple Files</h3>
             <form id="multipleUploadForm" name="multipleUploadForm">
-                <input id="multipleFileUploadInput" type="file" name="files" class="file-input" multiple required/>
+                <input id="multipleFileUploadInput" type="file" name="files" class="file-input" multiple="multiple" required = "required"></input>
                 <button type="submit" class="primary submit-btn">Submit</button>
             </form>
             <div class="upload-response">

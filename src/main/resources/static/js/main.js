@@ -24,6 +24,7 @@ function uploadSingleFile(file) {
             singleFileUploadError.style.display = "none";
             singleFileUploadSuccess.innerHTML = "<p>File Uploaded Successfully.</p><p>DownloadUrl : <a href='" + response.fileDownloadUri + "' target='_blank'>" + response.fileDownloadUri + "</a></p>";
             singleFileUploadSuccess.style.display = "block";
+            location.reload();
         } else {
             singleFileUploadSuccess.style.display = "none";
             singleFileUploadError.innerHTML = (response && response.message) || "Some Error Occurred";
@@ -73,13 +74,3 @@ singleUploadForm.addEventListener('submit', function(event){
     event.preventDefault();
 }, true);
 
-
-multipleUploadForm.addEventListener('submit', function(event){
-    var files = multipleFileUploadInput.files;
-    if(files.length === 0) {
-        multipleFileUploadError.innerHTML = "Please select at least one file";
-        multipleFileUploadError.style.display = "block";
-    }
-    uploadMultipleFiles(files);
-    event.preventDefault();
-}, true);

@@ -1,0 +1,154 @@
+node("performance_test_mysql"){
+   stage('Reset mysql data') {
+        echo 'Reset mysql data...'
+        sh '''cd /opt/sql
+            ./sql.sh
+        '''
+   }
+}
+node("Performance"){
+   stage('Preparation') {
+      echo 'Preparing...'
+      git branch: '${BRANCH}', credentialsId: 'guijj', url: 'git@github.ibm.com:sdc/keter.git'
+   }
+   
+   stage('Build war and repackage') {
+        echo 'Maven Install...'
+        sh '''cd workspace
+        echo cleaning...
+        cd keter-release 
+        rm -rf dist
+        mkdir dist
+        
+        echo building web dependent jars...
+        cd ../keter-web
+        mvn install:install-file -Dfile=lib/bpm_diagram_tool-1.0.jar -DgroupId=com.ibm.cte.sdc.bpm.testing -DartifactId=bpm_diagram_tool -Dversion=1.0 -Dpackaging=jar
+        mvn install:install-file -Dfile=lib/bpm_rest_api-1.0.jar -DgroupId=com.ibm.cte.sdc.bpm.testing -DartifactId=bpm_rest_api -Dversion=1.0 -Dpackaging=jar
+    	mvn install:install-file -Dfile=lib/bpm_analysis_tool-1.0.1.jar -DgroupId=com.ibm.websphere.bpm -DartifactId=bpm_analysis_tool -Dversion=1.0.1 -Dpackaging=jar
+        mvn install:install-file -Dfile=lib/checkstyle_tool-1.0.0.jar -DgroupId=com.ibm.websphere.bpm -DartifactId=checkstyle_tool -Dversion=1.0.0 -Dpackaging=jar
+        mvn install:install-file -Dfile=lib/checkstyleRuleServiceClient-1.0.0.jar -DgroupId=com.ibm.websphere.bpm -DartifactId=checkstyleRuleServiceClient -Dversion=1.0.0 -Dpackaging=jar
+        mvn install:install-file -Dfile=lib/jrules-engine-1.0.jar -DgroupId=jrules-engine -DartifactId=jrules-engine -Dversion=1.0 -Dpackaging=jar
+        mvn install:install-file -Dfile=lib/db2jcc4-11.1.jar -DgroupId=com.ibm.db2.jcc -DartifactId=db2jcc4 -Dversion=11.1 -Dpackaging=jar
+        mvn install:install-file -Dfile=lib/ojdbc8-12.2.0.1.jar -DgroupId=com.oracle.jdbc -DartifactId=ojdbc8 -Dversion=12.2.0.1 -Dpackaging=jar
+        cd ../keter-model
+        mvn clean install -Dmaven.test.skip=true
+        cd ../keter-utility
+        mvn clean install -Dmaven.test.skip=true
+        cd ../bpm-rest-api
+        mvn clean install -Dmaven.test.skip=true
+    	cd ../baw-statistic-tool
+    	mvn clean install -Dmaven.test.skip=true
+        cd ../DroolsBPMCheckstyleRules
+        mvn clean install -Dmaven.test.skip=true
+        cd ../toolkit-references-tool
+        mvn clean install -Dmaven.test.skip=true
+        cd ../bpm-diagram-tool
+        mvn clean install -Dmaven.test.skip=true
+        cd ../snapshot-comparer
+        mvn clean install -Dmaven.test.skip=true
+        
+        echo building jar...
+		cd ../keter-packaging
+		mvn clean package
+
+		echo releasing whole package...
+		echo building war...
+		cd ../keter-web
+		mvn -f pom.xml clean package -Dmaven.test.skip=true -Dida.build.number=$1 -P keter-release
+		cd ../keter-release
+		rm -rf release
+		mkdir release
+		echo copy files...
+		mkdir release/build
+		mkdir release/conf
+		mkdir release/lib
+		mkdir release/sql
+		mkdir release/sql/migrate
+		mkdir release/sql/migrate/db2
+		mkdir release/sql/migrate/mysql
+		mkdir release/sql/migrate/oracle
+		mkdir release/sql/advanced-permission
+		mkdir release/sql/advanced-permission/data
+		mkdir release/sql/advanced-permission/migrate
+		mkdir release/sql/advanced-permission/migrate/oracle
+
+		mkdir release/toolkit
+		cp ../keter-web/target/ida-web-1.0.war release/build/ida-web.war
+		cp ../keter-web/src/main/resources/schema-mysql.sql release/sql
+		cp ../keter-web/src/main/resources/data-mysql.sql release/sql
+		cp ../keter-web/src/main/resources/schema-db2.sql release/sql
+		cp ../keter-web/src/main/resources/data-db2.sql release/sql
+		cp /opt/mysql/data-test.sql release/sql
+		cp ../keter-web/src/main/resources/schema-oracle.sql release/sql
+		cp ../keter-web/src/main/resources/data-oracle.sql release/sql
+		cp ../keter-web/src/main/resources/migrate/mysql/migrate-mysql-*.sql release/sql/migrate/mysql
+		cp ../keter-web/src/main/resources/migrate/db2/migrate-db2-*.sql release/sql/migrate/db2
+		cp ../keter-web/src/main/resources/migrate/oracle/migrate-oracle-*.sql release/sql/migrate/oracle
+		cp ../keter-web/src/main/resources/advanced-permission/data/*.sql release/sql/advanced-permission/data
+		cp ../keter-web/src/main/resources/advanced-permission/migrate/oracle/migrate-oracle-*.sql release/sql/advanced-permission/migrate/oracle
+		cp ../keter-packaging/conf/package.properties release/conf
+		cp ../keter-packaging/target/keter-packaging-1.0-jar-with-dependencies.jar release/lib
+		cp ../keter-packaging/package.sh release
+		cp ../keter-packaging/package.bat release
+		cp lib/*.jar release/lib
+		cp /opt/mysql/mysql-connector-java-5.1.44.jar release/lib
+		cp ../../toolkit/IDA*.twx release/toolkit
+		cp /opt/mysql/ida.properties release/conf/ida.properties
+
+		mkdir release/checkstyle-rules
+		cd release/checkstyle-rules
+		cp -r ../../../CheckstyleBOM ./
+		cp -r ../../../CheckstyleRules ./
+		cp -r ../../../CheckstyleRulesCore ./
+		cp -r ../../../CheckstyleRulesCustomized ./
+		jar -cMf checkstyle-rules.zip *
+		cd ..
+
+		mkdir custom-java-command
+		cd custom-java-command
+		cp -r ../../../CustomJavaCommand ./
+		cp ../../../keter-web/target/ida-web-1.0/WEB-INF/lib/keter-web.jar ./CustomJavaCommand/libs/
+		cp ../../../keter-web/lib/bpm_diagram_tool-1.0.jar ./CustomJavaCommand/libs/
+		cp ../../../keter-web/lib/bpm_rest_api-1.0.jar ./CustomJavaCommand/libs/
+		cp ../../../keter-model/target/keter-model-1.0.jar ./CustomJavaCommand/libs/
+		cp ../../../keter-utility/target/keter-utility-1.0.jar ./CustomJavaCommand/libs/
+		jar -cMf custom-java-command.zip *
+		cd ..
+
+		mkdir workspace
+		cd workspace
+		cp ../checkstyle-rules/checkstyle-rules.zip ./
+		cp ../custom-java-command/custom-java-command.zip ./
+
+		cd ..
+		rm -rf checkstyle-rules
+		rm -rf custom-java-command
+		
+		echo IDA package created!
+
+
+		java -cp "lib/keter-packaging-1.0-jar-with-dependencies.jar:conf" com.ibm.sdc.bpm.test.packaging.Packaging
+				
+		echo IDA repackage created!
+
+
+        '''
+   }
+   
+   stage('Restart server') {
+		echo 'Restart server...'
+        sh '''
+		cd /opt/wlp/bin	
+		./server stop ida_server
+		sleep 5s
+		rm -f /opt/wlp/usr/servers/ida_server/apps/ida-web.war
+		rm -rf /opt/wlp/usr/servers/ida_server/apps/expanded
+		cp /root/jenkins/workspace/IDA_performence_test_deployment/workspace/keter-release/release/build/ida-web.war /opt/wlp/usr/servers/ida_server/apps/
+		sleep 10s
+		./server start ida_server
+		echo server started!
+		'''
+   }
+   
+
+}

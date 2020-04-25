@@ -45,5 +45,10 @@ public class MainController {
 		model.put("date", new Date());
 		return "privateValueSetting";
 	}
+	
+	@RequestMapping("/uploadPage")
+	public String uploadPage() {
+		return "uploadPage";
+	}
 
 }
