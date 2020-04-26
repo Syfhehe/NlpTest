@@ -2,33 +2,33 @@
 <html>
 
 <head th:fragment="header">
-	<title>Testing Service</title>
-    <link rel="stylesheet" th:href="@{/css/bootstrap.css}" />
-    <link rel="stylesheet" th:href="@{/css/testing-web.css}" />
-    <script type="text/javascript" src="js/lib/jquery-1.11.1.js"></script>
+<title>Testing Service</title>
+<link rel="stylesheet" th:href="@{/css/bootstrap.css}" />
+<link rel="stylesheet" th:href="@{/css/testing-web.css}" />
+<script type="text/javascript" src="js/lib/jquery-1.11.1.js"></script>
+<script th:inline="javascript">
+	var contextPath = [[${#httpServletRequest.getContextPath()}]]
+</script>
 </head>
 
 <body>
-    <div class="navbar navbar-inverse" th:fragment="header">
-        <div class="navbar-collapse collapse">
-            <ul class="nav navbar-nav">
-                <li th:classappend="${module == 'upload' ? 'active' : ''}">
-                    <a href="#" th:href="@{/}">文件列表</a>
-                </li>
-                <li th:classappend="${module == 'tasks' ? 'active' : ''}">
-                    <a href="#" th:href="@{/privateValueSetting}">隐私值设置</a>
-                </li>
-            </ul>
-            <ul class="nav navbar-nav navbar-right">
-                <li>
-                    <a href="#" th:href="@{#}" onclick="console.log('logout ...');$('#form').submit();console.log('logout 2...');return false;">
-                        <span class="glyphicon glyphicon-log-out" aria-hidden="true"></span>&nbsp;Logout
-                    </a>
-                    <form id="form" method="post" th:action="@{/logout}"></form>
-                </li>
-            </ul>
-        </div>
-    </div>
+	<div class="navbar navbar-inverse" th:fragment="header">
+		<div class="navbar-collapse collapse">
+			<ul class="nav navbar-nav">
+				<li th:classappend="${module == 'upload' ? 'active' : ''}"><a
+					href="#" th:href="@{/}">文件列表</a></li>
+				<li th:classappend="${module == 'tasks' ? 'active' : ''}"><a
+					href="#" th:href="@{/sensitivities}">隐私值设置</a></li>
+			</ul>
+			<ul class="nav navbar-nav navbar-right">
+				<li><a href="#" th:href="@{#}"
+					onclick="console.log('logout ...');$('#form').submit();console.log('logout 2...');return false;">
+						<span class="glyphicon glyphicon-log-out" aria-hidden="true"></span>&nbsp;Logout
+				</a>
+					<form id="form" method="post" th:action="@{/logout}"></form></li>
+			</ul>
+		</div>
+	</div>
 </body>
 
 </html>

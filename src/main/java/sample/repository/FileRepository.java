@@ -11,10 +11,9 @@ import sample.model.User;
 @Repository
 public interface FileRepository extends JpaRepository<FileModel, Long> {
 
-  User findByFileName(String fileName);
+	User findByFileName(String fileName);
 
-  @Query("from FileModel f where f.fileName=:fileName")
-  User findUser(@Param("fileName") String fileName);
+	@Query("from FileModel f where f.fileName=:fileName")
+	User findUser(@Param("fileName") String fileName);
 
-  
 }

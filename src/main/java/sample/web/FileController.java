@@ -1,5 +1,6 @@
 package sample.web;
 
+import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import sample.model.UploadFileResponse;
+import sample.repository.FileRepository;
 import sample.service.FileService;
 
 import javax.servlet.http.HttpServletRequest;
@@ -23,49 +25,62 @@ import java.util.stream.Collectors;
 @RestController
 public class FileController {
 
-  private static final Logger logger = LoggerFactory.getLogger(FileController.class);
+	private static final Logger logger = LoggerFactory.getLogger(FileController.class);
 
-  @Autowired
-  private FileService fileService;
+	@Autowired
+	FileRepository fileRepository;
 
-  @PostMapping("/uploadFile")
-  public UploadFileResponse uploadFile(@RequestParam("file") MultipartFile file) {
-    String fileName = fileService.storeFile(file);
+	@Autowired
+	private FileService fileService;
 
-    String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
-        .path("/downloadFile/").path(fileName).toUriString();
+	@PostMapping("/uploadFile")
+	public UploadFileResponse uploadFile(@RequestParam("file") MultipartFile file) {
+		String fileName = fileService.storeFile(file);
 
-    return new UploadFileResponse(fileName, fileDownloadUri, file.getContentType(), file.getSize());
-  }
+		String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/downloadFile/")
+				.path(fileName).toUriString();
 
-  @PostMapping("/uploadMultipleFiles")
-  public List<UploadFileResponse> uploadMultipleFiles(
-      @RequestParam("files") MultipartFile[] files) {
-    return Arrays.stream(files).map(this::uploadFile).collect(Collectors.toList());
-  }
+		return new UploadFileResponse(fileName, fileDownloadUri, file.getContentType(), file.getSize());
+	}
 
-  @GetMapping("/downloadFile/{fileName:.+}")
-  public ResponseEntity<Resource> downloadFile(@PathVariable String fileName,
-      HttpServletRequest request) {
-    // Load file as Resource
-    Resource resource = fileService.loadFileAsResource(fileName);
+	@PostMapping("/uploadMultipleFiles")
+	public List<UploadFileResponse> uploadMultipleFiles(@RequestParam("files") MultipartFile[] files) {
+		return Arrays.stream(files).map(this::uploadFile).collect(Collectors.toList());
+	}
 
-    // Try to determine file's content type
-    String contentType = null;
-    try {
-      contentType = request.getServletContext().getMimeType(resource.getFile().getAbsolutePath());
-    } catch (IOException ex) {
-      logger.info("Could not determine file type.");
-    }
+	@GetMapping("/downloadFile/{fileName:.+}")
+	public ResponseEntity<Resource> downloadFile(@PathVariable String fileName, HttpServletRequest request) {
+		// Load file as Resource
+		Resource resource = fileService.loadFileAsResource(fileName);
 
-    // Fallback to the default content type if type could not be determined
-    if (contentType == null) {
-      contentType = "application/octet-stream";
-    }
+		// Try to determine file's content type
+		String contentType = null;
+		try {
+			contentType = request.getServletContext().getMimeType(resource.getFile().getAbsolutePath());
+		} catch (IOException ex) {
+			logger.info("Could not determine file type.");
+		}
 
-    return ResponseEntity.ok().contentType(MediaType.parseMediaType(contentType))
-        .header(HttpHeaders.CONTENT_DISPOSITION,
-            "attachment; filename=\"" + resource.getFilename() + "\"")
-        .body(resource);
-  }
+		// Fallback to the default content type if type could not be determined
+		if (contentType == null) {
+			contentType = "application/octet-stream";
+		}
+
+		return ResponseEntity.ok().contentType(MediaType.parseMediaType(contentType))
+				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
+				.body(resource);
+	}
+
+	@SuppressWarnings("unchecked")
+	@DeleteMapping(value = "/file/{id}")
+	@ResponseBody
+	public String personDelete(@PathVariable("id") Long id) {
+		fileRepository.delete(id);
+		JSONObject obj = new JSONObject();
+		obj.put("result", "succeeded");
+		obj.put("status", "200");
+		String jsonText = obj.toString();
+		return jsonText;
+	}
+
 }

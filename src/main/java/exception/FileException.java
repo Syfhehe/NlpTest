@@ -1,11 +1,16 @@
 package exception;
 
 public class FileException extends RuntimeException {
-  public FileException(String message) {
-    super(message);
-  }
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
-  public FileException(String message, Throwable cause) {
-    super(message, cause);
-  }
+	public FileException(String message) {
+		super(message);
+	}
+
+	public FileException(String message, Throwable cause) {
+		super(message, cause);
+	}
 }

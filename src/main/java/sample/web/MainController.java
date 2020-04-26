@@ -1,39 +1,31 @@
 package sample.web;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import sample.model.FileModel;
+import sample.model.Sensitivity;
 import sample.repository.FileRepository;
-import sample.service.FileService;
-import sample.util.FileUtil;
+import sample.repository.SensitivityRepository;
 
 @Controller
 @ComponentScan("sample.service")
 public class MainController {
 	@Autowired
 	FileRepository fileRepository;
-	
+
 	@Autowired
-	private FileService fileService; 
-	
-	private static final String uploadFolder = "uploads";
+	SensitivityRepository sensitivityRepository;
 
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String home(Map<String, Object> model) {
-		List<File> files = FileUtil.searchFile(new File(uploadFolder), ".txt");
-		List<FileModel> fileModes = fileService.generateFileModels(files);
+		List<FileModel> fileModes = fileRepository.findAll();
 		model.put("fileModes", fileModes);
 		return "home";
 	}
@@ -43,23 +35,16 @@ public class MainController {
 		throw new RuntimeException("Expected exception in controller");
 	}
 
-	@RequestMapping(value = "/privateValueSetting", method = RequestMethod.GET)
-	public String privateValueSetting(Map<String, Object> model) {
-		model.put("message", "Hello World");
-		model.put("title", "Hello Home");
-		model.put("date", new Date());
-		return "privateValueSetting";
+	@RequestMapping(value = "/sensitivities", method = RequestMethod.GET)
+	public String getSensitivities(Map<String, Object> model) {
+		List<Sensitivity> sensitivities = sensitivityRepository.findAll();
+		model.put("sensitivities", sensitivities);
+		return "sensitivity";
 	}
-	
+
 	@RequestMapping("/uploadPage")
 	public String uploadPage() {
 		return "uploadPage";
 	}
-	
-    @DeleteMapping(value = "/file/{id}")
-    public void personDelete(@PathVariable("id") Long id) {
-    	fileRepository.delete(id);
-    }
-
 
 }

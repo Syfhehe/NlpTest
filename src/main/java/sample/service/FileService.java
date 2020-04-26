@@ -10,6 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 import exception.FileException;
 import sample.model.FileModel;
 import sample.model.FileProperties;
+import sample.repository.FileRepository;
 import sample.util.FileUtil;
 
 import java.io.File;
@@ -24,6 +25,8 @@ import java.util.List;
 
 @Service
 public class FileService {
+	@Autowired
+	FileRepository fileRepository;
 
 	private Path fileStorageLocation;
 
@@ -50,6 +53,13 @@ public class FileService {
 			// Copy file to the target location (Replacing existing file with the same name)
 			Path targetLocation = this.fileStorageLocation.resolve(fileName);
 			Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
+
+			FileModel fm = new FileModel();
+			fm.setFileName(fileName);
+			fm.setSensitiveValue(0);
+			fm.setWordCount(FileUtil.count(targetLocation.toFile()));
+			fm.setContent(file.getBytes());
+			fileRepository.save(fm);
 
 			return fileName;
 		} catch (IOException ex) {

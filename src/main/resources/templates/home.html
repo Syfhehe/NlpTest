@@ -40,10 +40,10 @@
 						<td th:text="${fileMode.fileName}"></td>
 						<td th:text="${fileMode.wordCount}"></td>
 						<td th:text="${fileMode.sensitiveValue}"></td>
-						<td><button type="button" class="btn btn-primary  btn-sm"
-								style="margin-right: 15px;">访问</button>
-							<button type="button" class="btn btn-primary  btn-sm"
-								style="margin-right: 15px;">删除</button></td>
+						<td><a th:href="@{'/file' + ${fileMode.id}}" type="button" class="btn btn-primary  btn-sm"
+								style="margin-right: 15px;">访问</a>
+							<a th:id="${fileMode.id}" type="button" class="deleteButton btn btn-primary  btn-sm"
+								style="margin-right: 15px;">删除</a></td>
 					</tr>
 				</tbody>
 			</table>
@@ -64,10 +64,8 @@
 			</div>
 		</div>
 		
-		<div th:replace="fragments/footer :: footer"></div>
+		<div th:replace="fragments/footer :: footer(libs='fileUpload, main')"></div>
 	</div>
 	
-	<script src="/js/main.js"></script>
-
 </body>
 </html>
