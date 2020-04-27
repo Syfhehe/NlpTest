@@ -39,6 +39,7 @@ public class MainController {
 	public String getSensitivities(Map<String, Object> model) {
 		List<Sensitivity> sensitivities = sensitivityRepository.findAll();
 		model.put("sensitivities", sensitivities);
+		model.put("sensitivityObj", new Sensitivity());
 		return "sensitivity";
 	}
 

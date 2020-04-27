@@ -6,11 +6,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import sample.model.Sensitivity;
@@ -25,9 +27,9 @@ public class SensitivityController {
 	SensitivityRepository sensitivityRepository;
 
 	/**
-	 * Add a new Team.
+	 * Add a new sensitivity.
 	 * 
-	 * @return to page team_configuration
+	 * @return to page sensitivity page
 	 */
 	@RequestMapping(value = "/sensitivities", method = RequestMethod.POST)
 	public String addSensitivity(@ModelAttribute Sensitivity sensitivityObj) {
@@ -35,9 +37,15 @@ public class SensitivityController {
 		Sensitivity st = new Sensitivity();
 		st.setWordName(sensitivityObj.getWordName());
 		st.setWordValue(sensitivityObj.getWordValue());
+		sensitivityRepository.save(st);
 		return "redirect:/sensitivities";
 	}
 
+	/**
+	 * Delete a new sensitivity.
+	 * 
+	 * @return to page sensitivity page
+	 */
 	@SuppressWarnings("unchecked")
 	@DeleteMapping(value = "/sensitivities/{id}")
 	@ResponseBody
@@ -48,6 +56,42 @@ public class SensitivityController {
 		obj.put("status", "200");
 		String jsonText = obj.toString();
 		return jsonText;
+	}
+
+	/**
+	 * Get the edit sensitivity form.
+	 * 
+	 * @return to page editSensitivityForm
+	 */
+	@RequestMapping(value = "/sensitivityform", method = RequestMethod.GET)
+	public String sensitivityForm(@RequestParam(value = "sensitivityId", required = true) Long sensitivityId,
+			Model model, Sensitivity sensitivityObj) {
+		logger.debug("Loading sensitivityForm...");
+		if (sensitivityId != -1) {
+			Sensitivity sensitivity = sensitivityRepository.findOne(sensitivityId);
+			model.addAttribute("sensitivityObj", sensitivity);
+		} else {
+			model.addAttribute("sensitivityObj", new Sensitivity());
+		}
+		return "fragments/sensitivityConfigurationForm :: sensitivityForm";
+	}
+
+	/**
+	 * Edit Sensitivity.
+	 *
+	 * @return return to page user_configuration
+	 */
+	@RequestMapping(value = "/sensitivities/{sensitivityId}", method = RequestMethod.POST)
+	public String editSensitivity(@ModelAttribute Sensitivity sensitivityObj,
+			@PathVariable("sensitivityId") Long sensitivityId) {
+		logger.debug("Edit a new sensitivity!");
+		if (sensitivityObj.getWordName() != null) {
+			Sensitivity sensitivity = sensitivityRepository.findOne(sensitivityId);
+			sensitivity.setWordName(sensitivityObj.getWordName());
+			sensitivity.setWordValue(sensitivityObj.getWordValue());
+			sensitivityRepository.save(sensitivity);
+		}
+		return "redirect:/sensitivities";
 	}
 
 }

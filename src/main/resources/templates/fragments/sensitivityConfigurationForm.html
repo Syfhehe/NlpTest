@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<body>
+	<div id="sensitivityFormBlock" th:fragment="sensitivityForm"
+		th:remove="tag">
+		<form class="form-horizontal" id="sensitivityForm"
+			th:object="${sensitivityObj}" method="post"
+			th:action="${sensitivityObj.id} ? @{'/sensitivities/' + ${sensitivityObj.id}}  : @{/sensitivities}">
+			<input type="hidden" id="sensitivityId" th:field="*{id}"></input>
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"
+					aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+				<h4 class="modal-title"
+					th:text="${sensitivityObj.id} ? 'Edit sensitivity' : 'Add sensitivity'"></h4>
+			</div>
+			<div class="modal-body">
+				<div class="form-group required">
+					<label class="col-md-3 control-label" for="wordName"
+						th:text="敏感词名称"></label>
+					<div class="col-md-9">
+						<input id="wordName" required="required" th:field="*{wordName}"
+							class="form-control"></input>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-md-3 control-label" for="wordValue"
+						th:text="敏感值大小"></label>
+					<div class="col-md-9">
+						<input id="wordValue" required="required" th:field="*{wordValue}"
+							class="form-control"></input>
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="submit" class="btn btn-primary"
+					th:unless="${sensitivityObj.id}" th:text="添加"></button>
+				<button type="submit" class="btn btn-primary"
+					th:if="${sensitivityObj.id}" th:text="保存"></button>
+				<button type="button" class="btn btn-default" data-dismiss="modal"
+					th:text="取消"></button>
+			</div>
+		</form>
+	</div>
+
+</body>
+</html>
