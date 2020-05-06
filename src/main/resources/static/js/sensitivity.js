@@ -24,13 +24,13 @@ define([ "jquery", "common/confirm_modal", ], function($, ConfirmModal) {
 				});
 				modal.show();
 			};
-
+		
 			$('a.deleteButton').on("click", function() {
 				var url, body;
 				url = contextPath + '/sensitivities/' + $(this).attr('id');
 				body = "是否确定要删除该该敏感词?";
 				deleteItems(body, url);
-			});
+			});	
 
 		});
 	});

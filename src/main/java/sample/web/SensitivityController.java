@@ -10,12 +10,15 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import sample.model.FileModel;
 import sample.model.Sensitivity;
+import sample.repository.FileRepository;
 import sample.repository.SensitivityRepository;
 
 @Controller
@@ -26,6 +29,9 @@ public class SensitivityController {
 	@Autowired
 	SensitivityRepository sensitivityRepository;
 
+	@Autowired
+	private FileRepository fileRepository;
+	
 	/**
 	 * Add a new sensitivity.
 	 * 
@@ -51,6 +57,25 @@ public class SensitivityController {
 	@ResponseBody
 	public String deleteSensitivity(@PathVariable("id") Long id) {
 		sensitivityRepository.delete(id);
+		JSONObject obj = new JSONObject();
+		obj.put("result", "succeeded");
+		obj.put("status", "200");
+		String jsonText = obj.toString();
+		return jsonText;
+	}
+	
+	/**
+	 * Clear a new sensitivity.
+	 * 
+	 * @return to page sensitivity page
+	 */
+	@SuppressWarnings("unchecked")
+	@PutMapping(value = "/sensitiveValue/{id}")
+	@ResponseBody
+	public String clearSensitivityValue(@PathVariable("id") Long id) {
+		FileModel fd = fileRepository.findOne(id);
+		fd.setSensitiveValue(0f);
+		fileRepository.save(fd);
 		JSONObject obj = new JSONObject();
 		obj.put("result", "succeeded");
 		obj.put("status", "200");

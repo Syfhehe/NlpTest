@@ -17,7 +17,7 @@ public class Sensitivity {
 	private String wordName;
 
 	@Column(name = "word_value")
-	private float wordValue;
+	private Float wordValue;
 
 	public Long getId() {
 		return id;
@@ -35,11 +35,11 @@ public class Sensitivity {
 		this.wordName = wordName;
 	}
 
-	public float getWordValue() {
+	public Float getWordValue() {
 		return wordValue;
 	}
 
-	public void setWordValue(float wordValue) {
+	public void setWordValue(Float wordValue) {
 		this.wordValue = wordValue;
 	}
 

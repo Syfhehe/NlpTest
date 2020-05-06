@@ -38,10 +38,14 @@
 						<td th:text="${fileMode.fileName}"></td>
 						<td th:text="${fileMode.wordCount}"></td>
 						<td th:text="${fileMode.sensitiveValue}"></td>
-						<td><a th:href="@{'/file' + ${fileMode.id}}" type="button" class="btn btn-primary  btn-sm"
-								style="margin-right: 15px;">访问</a>
-							<a th:id="${fileMode.id}" type="button" class="deleteButton btn btn-primary  btn-sm"
-								style="margin-right: 15px;">删除</a></td>
+						<td><a th:href="@{'/file?fileId=' + ${fileMode.id}}" type="button" data-toggle="modal" data-target="#fileDetailModal"
+							class="btn btn-primary btn-sm" style="margin-right: 15px;">访问</a>
+							<a th:id="${fileMode.id}" type="button"
+							class="deleteButton btn btn-primary  btn-sm"
+							style="margin-right: 15px;">删除</a>
+							<a th:id="${fileMode.id}" type="button"
+							class="clearButton btn btn-primary  btn-sm"
+							style="margin-right: 15px;">清空历史</a></td>
 					</tr>
 				</tbody>
 			</table>
@@ -62,8 +66,19 @@
 			</div>
 		</div>
 		
+		<div class="modal fade" id="fileDetailModal" tabindex="-1"
+			role="dialog" aria-labelledby="fileDetailModal">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div
+						th:replace="fragments/fileDetailForm :: fileDetailForm"></div>
+				</div>
+			</div>
+		</div>
+
+
 		<div th:replace="fragments/footer :: footer(libs='fileUpload, main')"></div>
 	</div>
-	
+
 </body>
 </html>

@@ -27,6 +27,8 @@ public class MainController {
 	public String home(Map<String, Object> model) {
 		List<FileModel> fileModes = fileRepository.findAll();
 		model.put("fileModes", fileModes);
+		FileModel fd = new FileModel();
+		model.put("fileModel", fd);
 		return "home";
 	}
 

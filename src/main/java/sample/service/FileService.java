@@ -10,8 +10,11 @@ import org.springframework.web.multipart.MultipartFile;
 import exception.FileException;
 import sample.model.FileModel;
 import sample.model.FileProperties;
+import sample.model.Sensitivity;
 import sample.repository.FileRepository;
 import sample.util.FileUtil;
+import sample.util.SensitiveUtil;
+import sample.util.SensitiveUtil.MatchType;
 
 import java.io.File;
 import java.io.IOException;
@@ -21,7 +24,12 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 
 @Service
 public class FileService {
@@ -56,7 +64,7 @@ public class FileService {
 
 			FileModel fm = new FileModel();
 			fm.setFileName(fileName);
-			fm.setSensitiveValue(0);
+			fm.setSensitiveValue(0F);
 			fm.setWordCount(FileUtil.count(targetLocation.toFile()));
 			fm.setContent(file.getBytes());
 			fileRepository.save(fm);
@@ -92,6 +100,27 @@ public class FileService {
 			fileModels.add(temp);
 		}
 		return fileModels;
+	}
+
+	public Float getSensiviteValue(FileModel fd, List<Sensitivity> stList) {
+		SensitiveUtil textFilter = new SensitiveUtil();
+		Set<String> sensitiveStrings = new HashSet<String>();
+		for (Sensitivity s : stList) {
+			sensitiveStrings.add(s.getWordName());
+		}
+		Map<String, Float> nameValueMap = new HashMap<String, Float>();
+		for (Sensitivity s : stList) {
+			nameValueMap.put(s.getWordName(),s.getWordValue());
+		}
+		textFilter.initSensitiveWordsMap(sensitiveStrings);
+		String fileContent = fd.getContentString();
+		Map<String, Integer> resultMap = textFilter.getSensitiveWords(fileContent, MatchType.MAX_MATCH);
+		Float total = 0f;
+		for (Entry<String, Integer> entry : resultMap.entrySet()) {
+			System.out.println(entry.getKey() + " : " + entry.getValue());
+			total += entry.getValue() * nameValueMap.get(entry.getKey());
+		}
+		return total;
 	}
 
 }

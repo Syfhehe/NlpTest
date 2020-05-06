@@ -23,12 +23,20 @@ public class FileModel {
 	private int wordCount;
 
 	@Column(name = "sensitive_value")
-	private float sensitiveValue;
+	private Float sensitiveValue;
 
 	@Lob
 	@Basic(fetch = FetchType.LAZY)
 	@Column(name = " content", columnDefinition = "longblob", nullable = true)
 	private byte[] content;
+	
+	@Column(name = "result")
+	private String result;
+	
+	@Column(name = "flag")
+	private Boolean flag;
+	
+	private String contentString;
 
 	public String getFileName() {
 		return fileName;
@@ -46,11 +54,11 @@ public class FileModel {
 		this.wordCount = wordCount;
 	}
 
-	public float getSensitiveValue() {
+	public Float getSensitiveValue() {
 		return sensitiveValue;
 	}
 
-	public void setSensitiveValue(float sensitiveValue) {
+	public void setSensitiveValue(Float sensitiveValue) {
 		this.sensitiveValue = sensitiveValue;
 	}
 
@@ -68,6 +76,30 @@ public class FileModel {
 
 	public void setContent(byte[] content) {
 		this.content = content;
+	}
+
+	public String getResult() {
+		return result;
+	}
+
+	public void setResult(String result) {
+		this.result = result;
+	}
+
+	public Boolean getFlag() {
+		return flag;
+	}
+
+	public void setFlag(Boolean flag) {
+		this.flag = flag;
+	}
+
+	public String getContentString() {
+		return contentString;
+	}
+
+	public void setContentString(String contentString) {
+		this.contentString = contentString;
 	}
 
 }
