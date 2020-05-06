@@ -36,8 +36,10 @@ public class FileModel {
 	@Column(name = "flag")
 	private Boolean flag;
 	
+	private Float current;
+	
 	private String contentString;
-
+	
 	public String getFileName() {
 		return fileName;
 	}
@@ -100,6 +102,14 @@ public class FileModel {
 
 	public void setContentString(String contentString) {
 		this.contentString = contentString;
+	}
+
+	public Float getCurrent() {
+		return current;
+	}
+
+	public void setCurrent(Float current) {
+		this.current = current;
 	}
 
 }

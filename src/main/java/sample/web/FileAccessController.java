@@ -33,12 +33,14 @@ public class FileAccessController {
 		// Grand total
 		Float total = fd.getSensitiveValue();
 		List<Sensitivity> stList = sensitivityRepository.findAll();
-		total += fileService.getSensiviteValue(fd, stList);
+		Float current = fileService.getSensiviteValue(fd, stList);
+		total = total + current;
+		fd.setCurrent(current);
 		if (total > 1) {
-			fd.setResult("累计敏感值为：" + total + "，累计敏感值超过设定，无法打开该文件");
+			fd.setResult(total + "，累计敏感值超过设定，无法打开该文件");
 			fd.setFlag(false);
 		} else {
-			fd.setResult("累计敏感值为：" + total);
+			fd.setResult(total + "，文件内容如下");
 			fd.setFlag(true);
 		}
 		fd.setSensitiveValue(total);
