@@ -11,6 +11,7 @@ import sample.repository.FileRepository;
 import sample.repository.SensitivityRepository;
 import sample.service.FileService;
 import java.io.UnsupportedEncodingException;
+import java.text.DecimalFormat;
 import java.util.List;
 
 @Controller
@@ -35,12 +36,14 @@ public class FileAccessController {
 		List<Sensitivity> stList = sensitivityRepository.findAll();
 		Float current = fileService.getSensiviteValue(fd, stList);
 		total = total + current;
+		DecimalFormat df = new DecimalFormat("#########.#");
+		String floatString = df.format(total);
 		fd.setCurrent(current);
 		if (total > 1) {
-			fd.setResult(total + "，累计敏感值超过设定，无法打开该文件");
+			fd.setResult(floatString + "，累计敏感值超过设定，无法打开该文件");
 			fd.setFlag(false);
 		} else {
-			fd.setResult(total + "，文件内容如下");
+			fd.setResult(floatString + "，文件内容如下");
 			fd.setFlag(true);
 		}
 		fd.setSensitiveValue(total);
