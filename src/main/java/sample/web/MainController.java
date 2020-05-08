@@ -52,8 +52,11 @@ public class MainController {
   @RequestMapping(value = "/sensitivities", method = RequestMethod.GET)
   public String getSensitivities(Map<String, Object> model) {
     List<Sensitivity> sensitivities = sensitivityRepository.findAll();
+    String userName = userService.getCurrentUsername();
+    User user = userRepository.findByUserName(userName);
     model.put("sensitivities", sensitivities);
     model.put("sensitivityObj", new Sensitivity());
+    model.put("role", user.getRole().toString());
     return "sensitivity";
   }
 
