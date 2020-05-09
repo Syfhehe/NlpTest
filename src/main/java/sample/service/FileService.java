@@ -11,7 +11,9 @@ import exception.FileException;
 import sample.model.FileModel;
 import sample.model.FileProperties;
 import sample.model.Sensitivity;
+import sample.model.User;
 import sample.repository.FileRepository;
+import sample.repository.UserRepository;
 import sample.util.FileUtil;
 import sample.util.SensitiveUtil;
 import sample.util.SensitiveUtil.MatchType;
@@ -33,9 +35,13 @@ import java.util.Set;
 
 @Service
 public class FileService {
+	
 	@Autowired
 	FileRepository fileRepository;
-
+	
+	@Autowired
+	UserRepository userRepository;
+	
 	private Path fileStorageLocation;
 
 	@Autowired
@@ -62,12 +68,16 @@ public class FileService {
 			Path targetLocation = this.fileStorageLocation.resolve(fileName);
 			Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
 
-			FileModel fm = new FileModel();
-			fm.setFileName(fileName);
-			fm.setSensitiveValue(0F);
-			fm.setWordCount(FileUtil.count(targetLocation.toFile()));
-			fm.setContent(file.getBytes());
-			fileRepository.save(fm);
+			for (User u : userRepository.findAll()) {
+				FileModel fm = new FileModel();
+				fm.setFileName(fileName);
+				fm.setSensitiveValue(0F);
+				fm.setWordCount(FileUtil.count(targetLocation.toFile()));
+				fm.setContent(file.getBytes());
+				u.getFileModels().add(fm);
+				fileRepository.saveAndFlush(fm);
+				userRepository.saveAndFlush(u);
+			}
 
 			return fileName;
 		} catch (IOException ex) {
@@ -110,7 +120,7 @@ public class FileService {
 		}
 		Map<String, Float> nameValueMap = new HashMap<String, Float>();
 		for (Sensitivity s : stList) {
-			nameValueMap.put(s.getWordName(),s.getWordValue());
+			nameValueMap.put(s.getWordName(), s.getWordValue());
 		}
 		textFilter.initSensitiveWordsMap(sensitiveStrings);
 		String fileContent = fd.getContentString();

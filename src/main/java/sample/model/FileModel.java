@@ -1,5 +1,8 @@
 package sample.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -8,8 +11,11 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
+import javax.persistence.ManyToMany;
+import javax.persistence.Table;
 
 @Entity
+@Table(name = "file_model")
 public class FileModel {
 
 	@Id
@@ -29,17 +35,20 @@ public class FileModel {
 	@Basic(fetch = FetchType.LAZY)
 	@Column(name = " content", columnDefinition = "longblob", nullable = true)
 	private byte[] content;
-	
+
 	@Column(name = "result")
 	private String result;
-	
+
 	@Column(name = "flag")
 	private Boolean flag;
-	
+
 	private Float current;
-	
+
 	private String contentString;
-	
+
+	@ManyToMany(mappedBy = "fileModels")
+	private List<User> users = new ArrayList<User>();
+
 	public String getFileName() {
 		return fileName;
 	}
@@ -110,6 +119,14 @@ public class FileModel {
 
 	public void setCurrent(Float current) {
 		this.current = current;
+	}
+
+	public List<User> getUsers() {
+		return users;
+	}
+
+	public void setUsers(List<User> users) {
+		this.users = users;
 	}
 
 }

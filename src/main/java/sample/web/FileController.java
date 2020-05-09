@@ -13,7 +13,9 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import sample.model.UploadFileResponse;
+import sample.model.User;
 import sample.repository.FileRepository;
+import sample.repository.UserRepository;
 import sample.service.FileService;
 
 import javax.servlet.http.HttpServletRequest;
@@ -26,6 +28,9 @@ import java.util.stream.Collectors;
 public class FileController {
 
 	private static final Logger logger = LoggerFactory.getLogger(FileController.class);
+
+	@Autowired
+	UserRepository userRepository;
 
 	@Autowired
 	FileRepository fileRepository;
@@ -75,6 +80,11 @@ public class FileController {
 	@DeleteMapping(value = "/file/{id}")
 	@ResponseBody
 	public String personDelete(@PathVariable("id") Long id) {
+		List<User> users = userRepository.findAll();
+		for (User u : users) {
+			u.getFileModels().remove(fileRepository.findOne(id));
+			userRepository.save(u);
+		}
 		fileRepository.delete(id);
 		JSONObject obj = new JSONObject();
 		obj.put("result", "succeeded");

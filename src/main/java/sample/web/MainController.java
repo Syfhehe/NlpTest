@@ -40,7 +40,7 @@ public class MainController {
   public String home(Map<String, Object> model) {
     String userName = userService.getCurrentUsername();
     User user = userRepository.findByUserName(userName);
-    List<FileModel> fileModes = fileRepository.findAll();
+    List<FileModel> fileModes = user.getFileModels();
     model.put("fileModes", fileModes);
     FileModel fd = new FileModel();
     model.put("fileModel", fd);

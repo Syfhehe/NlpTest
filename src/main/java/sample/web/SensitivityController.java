@@ -1,5 +1,7 @@
 package sample.web;
 
+import java.util.List;
+
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -78,8 +80,11 @@ public class SensitivityController {
 	@ResponseBody
 	public String clearSensitivityValue(@PathVariable("id") Long id) {
 		FileModel fd = fileRepository.findOne(id);
-		fd.setSensitiveValue(0f);
-		fileRepository.save(fd);
+		List<FileModel> fileLists = fileRepository.findFileByName(fd.getFileName());
+		for (FileModel f : fileLists) {
+			f.setSensitiveValue(0f);
+			fileRepository.save(f);
+		}
 		JSONObject obj = new JSONObject();
 		obj.put("result", "succeeded");
 		obj.put("status", "200");

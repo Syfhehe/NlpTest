@@ -6,3 +6,5 @@ VALUES
   ('ccc@test.com', '2c14ecc1d818e4417433d800e318d37d', true, 'DEVELOPER');
 
 INSERT INTO settings(NAME, VAL) values ('threshold', '1');
+
+INSERT INTO Sensitivity(word_name, word_value) values ('syf', 0.2);
