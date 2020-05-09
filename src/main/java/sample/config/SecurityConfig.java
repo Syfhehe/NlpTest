@@ -41,13 +41,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		auth.authenticationProvider(authProvider);
 	}
 
-//  @Override
-//  public void configure(AuthenticationManagerBuilder auth) throws Exception {
-//      auth.inMemoryAuthentication().withUser("admin@ibm.com").password("admin")
-//              .roles("ADMIN", "USER").and().withUser("user@ibm.com").password("user")
-//              .roles("USER");
-//  }
-
 	@Bean
 	public Md5PasswordEncoder passwordEncoder() {
 		return new Md5PasswordEncoder();

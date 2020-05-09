@@ -9,54 +9,77 @@
 <link rel="stylesheet" th:href="@{css/bootstrap.css}"></link>
 </head>
 <body>
-<div id="wrapper">
+	<div id="wrapper">
 
-	<div th:replace="fragments/header :: header"></div>
+		<div th:replace="fragments/header :: header"></div>
 
-	<div class="container">
-		<div>
-			<h3>敏感值列表</h3>
-			<div id="teamManagerButtons">
-				<a id="addButton" type="button" class="btn btn-primary margin-right" data-toggle="modal" data-target="#sensitivityModal" th:href="@{/sensitivityform?sensitivityId=-1}"> 
-					<span class="glyphicon glyphicon-plus"></span>添加敏感词
-				</a>
+		<div class="container">
+			<div>
+				<h3>敏感值列表</h3>
+				<div id="teamManagerButtons">
+					<a id="addButton" type="button"
+						class="btn btn-primary margin-right" data-toggle="modal"
+						data-target="#sensitivityModal"
+						th:href="@{/sensitivityform?sensitivityId=-1}"> <span
+						class="glyphicon glyphicon-plus"></span>添加敏感词
+					</a>
+				</div>
+
+				<table class="table table-striped">
+					<thead>
+						<tr>
+							<th>序号</th>
+							<th>敏感词</th>
+							<th>隐私值</th>
+							<th>操作</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="sensitivity,sensitivityStat : ${sensitivities}">
+							<td th:text="${sensitivityStat.count}"></td>
+							<td th:text="${sensitivity.wordName}"></td>
+							<td th:text="${sensitivity.wordValue}"></td>
+							<td><a type="button" class="btn btn-primary  btn-sm"
+								data-toggle="modal" data-target="#sensitivityModal"
+								th:href="@{'/sensitivityform?sensitivityId='+${sensitivity.id}}"
+								style="margin-right: 15px;">编辑</a> <a type="button"
+								th:id="${sensitivity.id}"
+								class="deleteButton btn btn-primary  btn-sm"
+								style="margin-right: 15px;">删除</a></td>
+						</tr>
+					</tbody>
+				</table>
 			</div>
-			
-			<table class="table table-striped">
-				<thead>
-					<tr>
-						<th>序号</th>
-						<th>敏感词</th>
-						<th>隐私值</th>
-						<th>操作</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr th:each="sensitivity,sensitivityStat : ${sensitivities}">
-						<td th:text="${sensitivityStat.count}"></td>
-						<td th:text="${sensitivity.wordName}"></td>
-						<td th:text="${sensitivity.wordValue}"></td>
-						<td>
-							<a type="button" class="btn btn-primary  btn-sm" data-toggle="modal" data-target="#sensitivityModal" th:href="@{'/sensitivityform?sensitivityId='+${sensitivity.id}}" style="margin-right: 15px;">编辑</a> 
-							<a type="button" th:id="${sensitivity.id}" class="deleteButton btn btn-primary  btn-sm" style="margin-right: 15px;">删除</a>
-						</td>
-					</tr>
-				</tbody>
-			</table>
-		</div>
-	</div>
 
-	<div class="modal fade" id="sensitivityModal" tabindex="-1"
-		role="dialog" aria-labelledby="myModalLabel">
-		<div class="modal-dialog" role="document">
-			<div class="modal-content">
-				<div
-					th:replace="fragments/sensitivityConfigurationForm :: sensitivityForm"></div>
+			<hr class="simple" color="#6f5499" />
+
+			<div style="display: inline-block;">
+				<h3>敏感值阈值设置</h3>
+				<label style="padding-top: 8px;" class="col-md-4 control-label">
+					<span>累计敏感值阈值</span>
+				</label>
+				<div class="col-md-4 control-label">
+					<input id="thresholdValue" class="form-control" required="required"
+						type="number" min="1" th:value="${threshold}" />
+				</div>
+				<div class="col-md-2 control-label">
+					<button id="thresholdSubmitBtn" class="btn btn-primary nomargine">确定</button>
+				</div>
+			</div>
+
+		</div>
+
+		<div class="modal fade" id="sensitivityModal" tabindex="-1"
+			role="dialog" aria-labelledby="myModalLabel">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div
+						th:replace="fragments/sensitivityConfigurationForm :: sensitivityForm"></div>
+				</div>
 			</div>
 		</div>
-	</div>
 
 		<div th:replace="fragments/footer :: footer(libs='sensitivity')"></div>
-</div>
+	</div>
 </body>
 </html>

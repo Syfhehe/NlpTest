@@ -18,20 +18,24 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import sample.model.FileModel;
 import sample.model.Sensitivity;
+import sample.model.Settings;
 import sample.repository.FileRepository;
 import sample.repository.SensitivityRepository;
+import sample.repository.SettingsRepository;
 
 @Controller
 @ComponentScan("sample.service")
 public class SensitivityController {
 	private static final Logger logger = LoggerFactory.getLogger(SensitivityController.class);
+	@Autowired
+	SettingsRepository settingsRepository;
 
 	@Autowired
 	SensitivityRepository sensitivityRepository;
 
 	@Autowired
 	private FileRepository fileRepository;
-	
+
 	/**
 	 * Add a new sensitivity.
 	 * 
@@ -63,9 +67,9 @@ public class SensitivityController {
 		String jsonText = obj.toString();
 		return jsonText;
 	}
-	
+
 	/**
-	 * Clear a new sensitivity.
+	 * Clear sensitivity.
 	 * 
 	 * @return to page sensitivity page
 	 */
@@ -76,6 +80,25 @@ public class SensitivityController {
 		FileModel fd = fileRepository.findOne(id);
 		fd.setSensitiveValue(0f);
 		fileRepository.save(fd);
+		JSONObject obj = new JSONObject();
+		obj.put("result", "succeeded");
+		obj.put("status", "200");
+		String jsonText = obj.toString();
+		return jsonText;
+	}
+
+	/**
+	 * Set Threshold Value.
+	 * 
+	 * @return to page sensitivity page
+	 */
+	@SuppressWarnings("unchecked")
+	@PutMapping(value = "/threshold/{value}")
+	@ResponseBody
+	public String setThresholdValue(@PathVariable("value") String value) {
+		Settings s = settingsRepository.findByName("threshold");
+		s.setVal(value);
+		settingsRepository.save(s);
 		JSONObject obj = new JSONObject();
 		obj.put("result", "succeeded");
 		obj.put("status", "200");

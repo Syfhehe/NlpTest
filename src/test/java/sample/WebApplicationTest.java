@@ -37,7 +37,7 @@ public class WebApplicationTest {
 	@Autowired
 	private UserRepository userRepository;
 
-	private static String userName = "ccc@ibm.com";
+	private static String userName = "ccc@test.com";
 	private static String password = "123456";
 
 	@Before

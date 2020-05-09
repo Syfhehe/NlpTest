@@ -40,10 +40,10 @@
 						<td th:text="${fileMode.sensitiveValue}"></td>
 						<td><a th:href="@{'/file?fileId=' + ${fileMode.id}}" type="button" data-toggle="modal" data-target="#fileDetailModal"
 							class="btn btn-primary btn-sm" style="margin-right: 15px;">访问</a>
-							<a th:id="${fileMode.id}" type="button"
+							<a th:if="${role}=='ADMIN'" th:id="${fileMode.id}" type="button"
 							class="deleteButton btn btn-primary  btn-sm"
 							style="margin-right: 15px;">删除</a>
-							<a th:id="${fileMode.id}" type="button"
+							<a th:if="${role}=='ADMIN'" th:id="${fileMode.id}" type="button"
 							class="clearButton btn btn-primary  btn-sm"
 							style="margin-right: 15px;">清空历史</a></td>
 					</tr>
@@ -52,7 +52,7 @@
 		</div>
 		<hr></hr>
 
-		<div class="single-upload">
+		<div class="single-upload" th:if="${role}=='ADMIN'">
 			<h3>文件上传</h3>
 			<form id="singleUploadForm" name="singleUploadForm">
 				<input id="singleFileUploadInput" type="file" name="file"

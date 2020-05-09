@@ -9,6 +9,7 @@ import sample.model.FileModel;
 import sample.model.Sensitivity;
 import sample.repository.FileRepository;
 import sample.repository.SensitivityRepository;
+import sample.repository.SettingsRepository;
 import sample.service.FileService;
 import java.io.UnsupportedEncodingException;
 import java.text.DecimalFormat;
@@ -20,6 +21,9 @@ public class FileAccessController {
 
 	@Autowired
 	private SensitivityRepository sensitivityRepository;
+	
+	@Autowired
+	SettingsRepository settingsRepository;
 
 	@Autowired
 	private FileRepository fileRepository;
@@ -28,7 +32,8 @@ public class FileAccessController {
 	private FileService fileService;
 
 	@RequestMapping(value = "/file", method = RequestMethod.GET)
-	public String visitFile(@RequestParam(value = "fileId", required = true) Long fileId, Model model) throws UnsupportedEncodingException {
+	public String visitFile(@RequestParam(value = "fileId", required = true) Long fileId, Model model)
+			throws UnsupportedEncodingException {
 		FileModel fd = fileRepository.findOne(fileId);
 		fd.setContentString(new String(fd.getContent(), "UTF-8"));
 		// Grand total
@@ -39,7 +44,7 @@ public class FileAccessController {
 		DecimalFormat df = new DecimalFormat("#########.#");
 		String floatString = df.format(total);
 		fd.setCurrent(current);
-		if (total > 1) {
+		if (total > Integer.parseInt(settingsRepository.findByName("threshold").getVal())) {
 			fd.setResult(floatString + "，累计敏感值超过设定，无法打开该文件");
 			fd.setFlag(false);
 		} else {

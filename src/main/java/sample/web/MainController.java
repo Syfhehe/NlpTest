@@ -14,6 +14,7 @@ import sample.model.Sensitivity;
 import sample.model.User;
 import sample.repository.FileRepository;
 import sample.repository.SensitivityRepository;
+import sample.repository.SettingsRepository;
 import sample.repository.UserRepository;
 import sample.service.UserService;
 
@@ -28,6 +29,9 @@ public class MainController {
 
   @Autowired
   UserRepository userRepository;
+  
+  @Autowired
+  SettingsRepository settingsRepository;  
   
   @Autowired
   SensitivityRepository sensitivityRepository;
@@ -57,6 +61,7 @@ public class MainController {
     model.put("sensitivities", sensitivities);
     model.put("sensitivityObj", new Sensitivity());
     model.put("role", user.getRole().toString());
+    model.put("threshold", settingsRepository.findByName("threshold").getVal());
     return "sensitivity";
   }
 
