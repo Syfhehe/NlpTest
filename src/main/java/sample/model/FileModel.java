@@ -44,6 +44,8 @@ public class FileModel {
 
 	private Float current;
 
+	@Lob
+	@Column
 	private String contentString;
 
 	@ManyToMany(mappedBy = "fileModels")

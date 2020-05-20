@@ -7,4 +7,4 @@ VALUES
 
 INSERT INTO settings(NAME, VAL) values ('threshold', '1');
 
-INSERT INTO Sensitivity(word_name, word_value) values ('syf', 0.2);
+INSERT INTO Sensitivity(word_name, word_value) values ('伟大', 0.2);
