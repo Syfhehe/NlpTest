@@ -1,19 +1,18 @@
 package sample.model;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinTable;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -39,9 +38,8 @@ public class User implements Serializable {
 	@Column(name = "active", nullable = false)
 	private boolean active;
 
-	@ManyToMany
-	@JoinTable(name = "u_f", joinColumns = {@JoinColumn(name = "user_id")}, inverseJoinColumns = {@JoinColumn(name = "file_model_id")})
-	private List<FileModel> fileModels = new ArrayList<FileModel>();
+    @OneToMany(mappedBy = "user",cascade=CascadeType.ALL,fetch=FetchType.LAZY)
+    private List<FileAccessHistory> fileAccessHistoryList;
 
 	protected User() {
 	}
@@ -108,12 +106,13 @@ public class User implements Serializable {
 		this.id = id;
 	}
 
-	public List<FileModel> getFileModels() {
-		return fileModels;
-	}
+  public List<FileAccessHistory> getFileAccessHistoryList() {
+    return fileAccessHistoryList;
+  }
 
-	public void setFileModels(List<FileModel> fileModels) {
-		this.fileModels = fileModels;
-	}
+  public void setFileAccessHistoryList(List<FileAccessHistory> fileAccessHistoryList) {
+    this.fileAccessHistoryList = fileAccessHistoryList;
+  }
+
 
 }

@@ -6,5 +6,8 @@ VALUES
   ('ccc@test.com', '2c14ecc1d818e4417433d800e318d37d', true, 'DEVELOPER');
 
 INSERT INTO settings(NAME, VAL) values ('threshold', '1');
+INSERT INTO settings(NAME, VAL) values ('timeRange', '3600');
+INSERT INTO settings(NAME, VAL) values ('times', '10');
+
 
 INSERT INTO Sensitivity(word_name, word_value) values ('伟大', 0.2);
