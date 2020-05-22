@@ -90,7 +90,8 @@ public class MainController {
         List<FileAccessHistory> historiesInLastHour = historyRepository
             .findAllByAccessDateBetween(user.getId(), file.getId(), calendar.getTime(), new Date());
         hisObj.setVisitTimes(historiesInLastHour.size());
-        historyViewObjects.add(hisObj);
+        if (hisObj.getVisitTimes() > 0)
+          historyViewObjects.add(hisObj);
       }
     }
     model.put("historyViewObjects", historyViewObjects);
