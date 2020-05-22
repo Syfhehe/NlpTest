@@ -81,10 +81,10 @@ public class SensitivityController {
 	public String clearSensitivityValue(@PathVariable("id") Long id) {
 		FileModel fd = fileRepository.findOne(id);
 		List<FileModel> fileLists = fileRepository.findFileByName(fd.getFileName());
-		for (FileModel f : fileLists) {
-			f.setSensitiveValue(0f);
-			fileRepository.save(f);
-		}
+//		for (FileModel f : fileLists) {
+//			f.setSensitiveValue(0f);
+//			fileRepository.save(f);
+//		}
 		JSONObject obj = new JSONObject();
 		obj.put("result", "succeeded");
 		obj.put("status", "200");

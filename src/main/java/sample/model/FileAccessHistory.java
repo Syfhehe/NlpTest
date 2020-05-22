@@ -1,5 +1,7 @@
 package sample.model;
 
+import java.util.Date;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -35,6 +37,10 @@ public class FileAccessHistory {
   @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.REFRESH}, optional = false)
   @JoinColumn(name = "user_id")
   private User user;
+  
+  @Column(name = "access_date")
+  private Date accessDate;
+
 
   public Long getId() {
     return id;
@@ -79,13 +85,20 @@ public class FileAccessHistory {
     this.user = user;
   }
 
-
   public FileModel getFileModel() {
     return fileModel;
   }
 
   public void setFileModel(FileModel fileModel) {
     this.fileModel = fileModel;
+  }
+
+  public Date getAccessDate() {
+    return accessDate;
+  }
+
+  public void setAccessDate(Date accessDate) {
+    this.accessDate = accessDate;
   }
 
 }

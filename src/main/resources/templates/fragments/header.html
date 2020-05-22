@@ -19,6 +19,9 @@
 					href="#" th:href="@{/}">文件列表</a></li>
 				<li th:if="${role}=='ADMIN'"
 					classappend="${module == 'tasks' ? 'active' : ''}"><a href="#"
+					th:href="@{/history}">历史记录</a></li>
+				<li th:if="${role}=='ADMIN'"
+					classappend="${module == 'tasks' ? 'active' : ''}"><a href="#"
 					th:href="@{/sensitivities}">隐私值设置</a></li>
 			</ul>
 			<ul class="nav navbar-nav navbar-right">

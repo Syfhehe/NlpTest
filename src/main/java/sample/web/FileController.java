@@ -79,12 +79,7 @@ public class FileController {
 	@SuppressWarnings("unchecked")
 	@DeleteMapping(value = "/file/{id}")
 	@ResponseBody
-	public String personDelete(@PathVariable("id") Long id) {
-		List<User> users = userRepository.findAll();
-		for (User u : users) {
-			u.getFileModels().remove(fileRepository.findOne(id));
-			userRepository.save(u);
-		}
+	public String fileDelete(@PathVariable("id") Long id) {	
 		fileRepository.delete(id);
 		JSONObject obj = new JSONObject();
 		obj.put("result", "succeeded");

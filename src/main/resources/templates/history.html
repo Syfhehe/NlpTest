@@ -27,7 +27,10 @@
 					<tr>
 						<th>序号</th>
 						<th>文件名</th>
-						<th>字数</th>
+						<th>访问者ID</th>
+						<th>上次访问时间</th>
+						<th>累计隐私值</th>
+						<th>最近一小时访问次数</th>
 						<th>操作</th>
 					</tr>
 				</thead>
@@ -36,31 +39,19 @@
 						<td th:text="${fileModeStat.count}"></td>
 						<td th:text="${fileMode.fileName}"></td>
 						<td th:text="${fileMode.wordCount}"></td>
-						<td><a th:href="@{'/file?fileId=' + ${fileMode.id}}"
-							type="button" data-toggle="modal" data-target="#fileDetailModal"
-							class="btn btn-primary btn-sm" style="margin-right: 15px;">访问</a>
+						<td th:text="${fileMode.wordCount}"></td>
+						<td th:text="${fileMode.wordCount}"></td>
+						<td th:text="${fileMode.wordCount}"></td>
+						<td>
 							<a th:if="${role}=='ADMIN'" th:id="${fileMode.id}" type="button"
-							class="deleteButton btn btn-primary  btn-sm"
-							style="margin-right: 15px;">删除</a></td>
+							class="clearButton btn btn-primary  btn-sm"
+							style="margin-right: 15px;">清空历史</a></td>
 					</tr>
 				</tbody>
 			</table>
 		</div>
+
 		<hr></hr>
-
-		<div class="single-upload" th:if="${role}=='ADMIN'">
-			<h3>文件上传</h3>
-			<form id="singleUploadForm" name="singleUploadForm">
-				<input id="singleFileUploadInput" type="file" name="file"
-					class="file-input" required="required"></input>
-
-				<button type="submit" class="primary submit-btn">Submit</button>
-			</form>
-			<div class="upload-response">
-				<div id="singleFileUploadError"></div>
-				<div id="singleFileUploadSuccess"></div>
-			</div>
-		</div>
 
 		<div class="modal fade" id="fileDetailModal" tabindex="-1"
 			role="dialog" aria-labelledby="fileDetailModal">
