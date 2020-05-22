@@ -97,19 +97,6 @@ public class FileService {
     }
   }
 
-  public List<FileModel> generateFileModels(List<File> files) {
-    List<FileModel> fileModels = new ArrayList<FileModel>();
-    FileModel temp;
-    for (File file : files) {
-      temp = new FileModel();
-      temp.setFileName(file.getName());
-//      temp.setSensitiveValue(0.1f);
-      temp.setWordCount(FileUtil.count(file));
-      fileModels.add(temp);
-    }
-    return fileModels;
-  }
-
   public Float getSensiviteValue(FileModel fd, List<Sensitivity> stList) {
     SensitiveUtil textFilter = new SensitiveUtil();
     Set<String> sensitiveStrings = new HashSet<String>();

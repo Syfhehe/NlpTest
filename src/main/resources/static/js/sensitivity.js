@@ -25,7 +25,7 @@ define([ "jquery", "common/confirm_modal", ], function($, ConfirmModal) {
 				modal.show();
 			};
 			
-			var updateThreshold = function(body, url) {
+			var updateSettings = function(body, url) {
 				var modal = new ConfirmModal({
 					title : "Confirm",
 					body : body,
@@ -61,7 +61,14 @@ define([ "jquery", "common/confirm_modal", ], function($, ConfirmModal) {
 				var url, body;
 				url = contextPath + '/threshold/' + $('#thresholdValue').val();
 				body = "是否确定要更新累计敏感值?";
-				updateThreshold(body, url);
+				updateSettings(body, url);
+			});	
+			
+			$('#visitTimesSubmitBtn').on("click", function() {
+				var url, body;
+				url = contextPath + '/visitTimes/' + $('#visitTimesValue').val();
+				body = "是否确定要更新一小时访问次数上限设置?";
+				updateSettings(body, url);
 			});	
 
 		});

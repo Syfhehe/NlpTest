@@ -67,6 +67,20 @@
 				</div>
 			</div>
 
+			<div style="display: inline-block;">
+				<h3>一小时访问次数上限设置</h3>
+				<label style="padding-top: 8px;" class="col-md-4 control-label">
+					<span>访问次数上限</span>
+				</label>
+				<div class="col-md-4 control-label">
+					<input id="visitTimesValue" class="form-control"
+						required="required" type="number" min="1" th:value="${visitTimes}" />
+				</div>
+				<div class="col-md-2 control-label">
+					<button id="visitTimesSubmitBtn" class="btn btn-primary nomargine">确定</button>
+				</div>
+			</div>
+
 		</div>
 
 		<div class="modal fade" id="sensitivityModal" tabindex="-1"

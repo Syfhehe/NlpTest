@@ -14,6 +14,8 @@ public class HistoryViewObject {
   private Date lastAcessDate;
 
   private Float totalSensitiveValue;
+  
+  private int visitTimes;
    
   public String getFileName() {
     return fileName;
@@ -61,6 +63,14 @@ public class HistoryViewObject {
 
   public void setUserId(Long userId) {
     this.userId = userId;
+  }
+
+  public int getVisitTimes() {
+    return visitTimes;
+  }
+
+  public void setVisitTimes(int visitTimes) {
+    this.visitTimes = visitTimes;
   }
 
   

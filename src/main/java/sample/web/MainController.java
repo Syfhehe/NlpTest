@@ -1,6 +1,7 @@
 package sample.web;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -55,6 +56,7 @@ public class MainController {
     FileViewObject fd = new FileViewObject();
     model.put("fileModel", fd);
     model.put("role", user.getRole().toString());
+    model.put("userName", user.getUserName() + ", 欢迎您!");
     return "home";
   }
 
@@ -62,32 +64,42 @@ public class MainController {
   public String history(Map<String, Object> model) {
     List<HistoryViewObject> historyViewObjects = new ArrayList<HistoryViewObject>();
     String userName = userService.getCurrentUsername();
-    User user = userRepository.findByUserName(userName);
+    List<User> users = userRepository.findAll();
+    User currnetUser = userRepository.findByUserName(userName);
+
     List<FileModel> fileModes = fileRepository.findAll();
+    Calendar calendar = Calendar.getInstance();
+    calendar.set(Calendar.HOUR_OF_DAY, calendar.get(Calendar.HOUR_OF_DAY) - 1);
 
     for (FileModel file : fileModes) {
-      List<FileAccessHistory> histories =
-          historyRepository.findFileAccessHistory(user.getId(), file.getId());
-      Float totalSensitiveValue = 0f;
-      for (FileAccessHistory h : histories) {
-        totalSensitiveValue += h.getSensitiveValue();
+      for (User user : users) {
+        List<FileAccessHistory> histories =
+            historyRepository.findFileAccessHistory(user.getId(), file.getId());
+        Float totalSensitiveValue = 0f;
+        for (FileAccessHistory h : histories) {
+          totalSensitiveValue += h.getSensitiveValue();
+        }
+        HistoryViewObject hisObj = new HistoryViewObject();
+        hisObj.setFileId(file.getId());
+        hisObj.setFileName(file.getFileName());
+        hisObj.setUserId(user.getId());
+        Date lastAcessDate = historyRepository.findLastestDateById(user.getId(), file.getId());
+        hisObj.setLastAcessDate(lastAcessDate);
+        hisObj.setTotalSensitiveValue(totalSensitiveValue);
+        hisObj.setUserName(user.getUserName());
+        List<FileAccessHistory> historiesInLastHour = historyRepository
+            .findAllByAccessDateBetween(user.getId(), file.getId(), calendar.getTime(), new Date());
+        hisObj.setVisitTimes(historiesInLastHour.size());
+        historyViewObjects.add(hisObj);
       }
-      HistoryViewObject hisObj = new HistoryViewObject();
-      hisObj.setFileId(file.getId());
-      hisObj.setFileName(file.getFileName());
-      hisObj.setUserId(user.getId());
-      Date lastAcessDate = historyRepository.findLastestDateById(user.getId(), file.getId());
-      hisObj.setLastAcessDate(lastAcessDate);
-      hisObj.setTotalSensitiveValue(totalSensitiveValue);
-      hisObj.setUserName(user.getUserName());
-      historyViewObjects.add(hisObj);
     }
-
     model.put("historyViewObjects", historyViewObjects);
     FileViewObject fd = new FileViewObject();
     model.put("fileModel", fd);
-    model.put("role", user.getRole().toString());
+    model.put("role", currnetUser.getRole().toString());
+    model.put("userName", currnetUser.getUserName() + ", 欢迎您!");
     return "history";
+
   }
 
   @RequestMapping("/foo")
@@ -104,6 +116,8 @@ public class MainController {
     model.put("sensitivityObj", new Sensitivity());
     model.put("role", user.getRole().toString());
     model.put("threshold", settingsRepository.findByName("threshold").getVal());
+    model.put("visitTimes", settingsRepository.findByName("visitTimes").getVal());
+    model.put("userName", user.getUserName() + ", 欢迎您!");
     return "sensitivity";
   }
 

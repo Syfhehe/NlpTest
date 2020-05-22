@@ -24,7 +24,9 @@
 					classappend="${module == 'tasks' ? 'active' : ''}"><a href="#"
 					th:href="@{/sensitivities}">隐私值设置</a></li>
 			</ul>
+
 			<ul class="nav navbar-nav navbar-right">
+				<li><a th:text="${userName}"></a></li>
 				<li><a href="#" th:href="@{#}"
 					onclick="console.log('logout ...');$('#form').submit();console.log('logout 2...');return false;">
 						<span class="glyphicon glyphicon-log-out" aria-hidden="true"></span>&nbsp;Logout

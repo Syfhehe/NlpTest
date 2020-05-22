@@ -58,7 +58,7 @@ define([ "jquery", "common/confirm_modal", ], function($, ConfirmModal) {
 
 			$('a.clearButton').on("click", function() {
 				var url, body;
-				url = contextPath + '/sensitiveValue/' + $(this).attr('id');
+				url = contextPath + '/sensitiveValue/' + $(this).attr('id')+'/userName/'+$(this).attr('value');
 				body = "是否确定清空历史敏感值?";
 				clearItems(body, url);
 			});

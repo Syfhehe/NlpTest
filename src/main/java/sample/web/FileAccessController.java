@@ -21,6 +21,7 @@ import sample.viewobject.FileViewObject;
 
 import java.io.UnsupportedEncodingException;
 import java.text.DecimalFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -57,6 +58,10 @@ public class FileAccessController {
     Float total = 0f;
     FileModel fd = fileRepository.findOne(fileId);
     fd.setContentString(new String(fd.getContent(), "UTF-8"));
+    Calendar calendar = Calendar.getInstance();
+    calendar.set(Calendar.HOUR_OF_DAY, calendar.get(Calendar.HOUR_OF_DAY) - 1);
+    List<FileAccessHistory> historiesInLastHour = historyRepository
+        .findAllByAccessDateBetween(user.getId(), fd.getId(), calendar.getTime(), new Date());
 
     // Grand total
     List<FileAccessHistory> histories =
@@ -80,10 +85,19 @@ public class FileAccessController {
       fileViewObject.setResultString(floatString + "，累计敏感值超过设定，无法打开该文件");
       fileViewObject.setFlag(false);
     } else {
-      fileViewObject.setResultString(floatString + "，文件内容如下");
-      fileViewObject.setFlag(true);
+      if (Integer.parseInt(
+          settingsRepository.findByName("visitTimes").getVal()) > historiesInLastHour.size()) {
+        fileViewObject.setResultString("最近一小时访问了" + historiesInLastHour.size() + "次，文件内容如下");
+        fileViewObject.setFlag(true);
+      } else {
+        fileViewObject.setResultString(
+            "访问过于频繁，最近一小时访问次数超过" + settingsRepository.findByName("visitTimes").getVal() + "次，无法继续访问");
+        fileViewObject.setFlag(false);
+      }
+
     }
     fileViewObject.setTotalSensitiveValue(total);
+    fileViewObject.setContentString(fd.getContentString());
 
     FileAccessHistory fileAccessHistory = new FileAccessHistory();
     fileAccessHistory.setAccessDate(new Date());
