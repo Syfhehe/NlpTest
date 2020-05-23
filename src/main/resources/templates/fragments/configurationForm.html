@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<body>
+<div id="userFormBlockBlock" th:fragment="userForm" th:remove="tag">
+	<form class="form-horizontal" id="userForm" th:object="${userViewObject}" method="post"
+				th:action="${userViewObject.userId} ? @{'/configuration/users/' + ${userViewObject.userId}} : @{/configuration/users}">
+		<input type="hidden" id="userId" th:field="*{userId}"></input>
+		<input type="hidden" th:field="*{active}"></input>
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				<span aria-hidden="true">&times;</span>
+			</button>
+			<h4 class="modal-title"
+					th:text="${userViewObject.userId} ? #{configuration.user.editUser} : #{configuration.user.addUser}"></h4>
+		</div>
+		<div class="modal-body">
+			<div class="form-group required">
+					<label class="col-md-3 control-label" for="userName" th:text="#{configuration.user.userName}"></label>
+					<div class="col-md-9">
+						<input th:unless="${userViewObject.userId}" id="userName" maxlength="50" th:field="*{userName}" class="form-control" required="required"></input>
+						<input th:if="${userViewObject.userId}" id="userName" th:field="*{userName}"
+									 class="form-control" data-rule-uniqueUserName="false"
+									 th:attrappend="readonly=${isAdminRole? 'false' : 'true'}"
+									 required="required"></input>
+					</div>
+				</div>
+				<div class="form-group required">
+					<label class="col-md-3 control-label" for="selectedRole" th:text="#{configuration.user.role}"></label>
+					<div class="col-md-9">
+						<select id="selectedRole" class="form-control" th:field="*{role}" required="required">
+							<option th:each="role : ${roleNames}" th:value="${role}" th:text="${role}"></option>
+						</select>
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="submit" class="btn btn-primary" th:unless="${userViewObject.userId}" th:text="#{common.button.create}"></button>
+				<button type="submit" class="btn btn-primary" th:if="${userViewObject.userId}" th:text="#{common.button.save}"></button>
+				<button type="button" class="btn btn-default" data-dismiss="modal" th:text="#{common.button.cancel}"></button>
+			</div>
+		</form>
+	</div>
+		
+</body>
+</html>

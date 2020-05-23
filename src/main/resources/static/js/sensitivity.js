@@ -3,7 +3,7 @@ define([ "jquery", "common/confirm_modal", ], function($, ConfirmModal) {
 		$(document).ready(function() {
 			var deleteItems = function(body, url) {
 				var modal = new ConfirmModal({
-					title : "Confirm",
+					title : "提示",
 					body : body,
 					onConfirm : function() {
 						$.ajax({
@@ -27,7 +27,7 @@ define([ "jquery", "common/confirm_modal", ], function($, ConfirmModal) {
 			
 			var updateSettings = function(body, url) {
 				var modal = new ConfirmModal({
-					title : "Confirm",
+					title : "提示",
 					body : body,
 					onConfirm : function() {
 						$.ajax({

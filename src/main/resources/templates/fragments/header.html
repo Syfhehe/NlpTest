@@ -23,17 +23,75 @@
 				<li th:if="${role}=='ADMIN'"
 					classappend="${module == 'tasks' ? 'active' : ''}"><a href="#"
 					th:href="@{/sensitivities}">隐私值设置</a></li>
+				<li th:if="${role}=='ADMIN'"
+					classappend="${module == 'tasks' ? 'active' : ''}"><a href="#"
+					th:href="@{/configuration/users}">用户管理 </a></li>
 			</ul>
 
 			<ul class="nav navbar-nav navbar-right">
 				<li><a th:text="${userName}"></a></li>
+				<li><a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a></li>
+				<li><a id="reset-btn" type="button" class="btn"
+					data-toggle="modal" data-target="#updatePasswordModal">Update
+						Password</a></li>
 				<li><a href="#" th:href="@{#}"
 					onclick="console.log('logout ...');$('#form').submit();console.log('logout 2...');return false;">
 						<span class="glyphicon glyphicon-log-out" aria-hidden="true"></span>&nbsp;Logout
 				</a>
 					<form id="form" method="post" th:action="@{/logout}"></form></li>
+
 			</ul>
 		</div>
+
+		<form class="form-horizontal" id="updatePasswordForm"
+			name="updatePasswordForm">
+			<div class="modal fade" id="updatePasswordModal" tabindex="-1"
+				role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal"
+								aria-hidden="true"></button>
+							<h4 class="modal-title" id="myModalLabel">Update User
+								Password</h4>
+						</div>
+						<div class="modal-body" id="oldPasswordBlock">
+							<div class="form-group">
+								<label class="col-md-8">Please enter old password</label>
+								<div class="col-md-8">
+									<input class="form-control required" name="oldPassword"
+										id="oldPassword" minlength="6" type="password" />
+								</div>
+							</div>
+							<div class="form-group" id="newPasswordBlock">
+								<label class="col-md-8">Please enter new password</label>
+								<div class="col-md-8">
+									<input class="form-control required" name="newPassword"
+										id="newPassword" minlength="6" type="password" />
+								</div>
+							</div>
+							<div class="form-group" id="newPasswordAgainBlock">
+								<label class="col-md-8">Please enter again</label>
+								<div class="col-md-8">
+									<input class="form-control required" name="newPasswordAgain"
+										id="newPasswordAgain" minlength="6" type="password" />
+									<p class="help-block" id="passwordAgainMsg"></p>
+								</div>
+							</div>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-default"
+								data-dismiss="modal" th:text="#{common.button.cancel}"></button>
+							<button id="updatePassButton" type="button"
+								class="btn btn-primary">Confirm</button>
+						</div>
+					</div>
+					<!-- /.modal-content -->
+				</div>
+				<!-- /.modal-dialog -->
+			</div>
+			<!-- /.modal -->
+		</form>
 	</div>
 </body>
 
