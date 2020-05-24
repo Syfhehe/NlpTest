@@ -55,6 +55,7 @@ public class UserConfigController {
     model.addAttribute("users", users);
     model.addAttribute("userViewObject", new UserViewObject());
     model.addAttribute("role", user.getRole().toString());
+    model.addAttribute("userName", user.getUserName() + ", 欢迎您!");
     return "user_configuration";
   }
 

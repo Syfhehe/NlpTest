@@ -32,11 +32,10 @@
 				<li><a th:text="${userName}"></a></li>
 				<li><a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a></li>
 				<li><a id="reset-btn" type="button" class="btn"
-					data-toggle="modal" data-target="#updatePasswordModal">Update
-						Password</a></li>
+					data-toggle="modal" data-target="#updatePasswordModal">更新密码</a></li>
 				<li><a href="#" th:href="@{#}"
 					onclick="console.log('logout ...');$('#form').submit();console.log('logout 2...');return false;">
-						<span class="glyphicon glyphicon-log-out" aria-hidden="true"></span>&nbsp;Logout
+						<span class="glyphicon glyphicon-log-out" aria-hidden="true"></span>&nbsp;登出
 				</a>
 					<form id="form" method="post" th:action="@{/logout}"></form></li>
 
@@ -52,26 +51,25 @@
 						<div class="modal-header">
 							<button type="button" class="close" data-dismiss="modal"
 								aria-hidden="true"></button>
-							<h4 class="modal-title" id="myModalLabel">Update User
-								Password</h4>
+							<h4 class="modal-title" id="myModalLabel">更新密码</h4>
 						</div>
 						<div class="modal-body" id="oldPasswordBlock">
 							<div class="form-group">
-								<label class="col-md-8">Please enter old password</label>
+								<label class="col-md-8">请输入老密码</label>
 								<div class="col-md-8">
 									<input class="form-control required" name="oldPassword"
 										id="oldPassword" minlength="6" type="password" />
 								</div>
 							</div>
 							<div class="form-group" id="newPasswordBlock">
-								<label class="col-md-8">Please enter new password</label>
+								<label class="col-md-8">请输入新密码</label>
 								<div class="col-md-8">
 									<input class="form-control required" name="newPassword"
 										id="newPassword" minlength="6" type="password" />
 								</div>
 							</div>
 							<div class="form-group" id="newPasswordAgainBlock">
-								<label class="col-md-8">Please enter again</label>
+								<label class="col-md-8">请再次输入新密码</label>
 								<div class="col-md-8">
 									<input class="form-control required" name="newPasswordAgain"
 										id="newPasswordAgain" minlength="6" type="password" />

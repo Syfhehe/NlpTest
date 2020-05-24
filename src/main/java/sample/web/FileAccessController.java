@@ -87,11 +87,11 @@ public class FileAccessController {
     } else {
       if (Integer.parseInt(
           settingsRepository.findByName("visitTimes").getVal()) > historiesInLastHour.size()) {
-        fileViewObject.setResultString("最近一小时访问了" + historiesInLastHour.size() + "次，文件内容如下");
+        fileViewObject.setResultString("最近一小时访问了" + (historiesInLastHour.size() + 1) + "次，文件内容如下");
         fileViewObject.setFlag(true);
       } else {
-        fileViewObject.setResultString(
-            "访问过于频繁，最近一小时访问次数超过" + settingsRepository.findByName("visitTimes").getVal() + "次，无法继续访问");
+        fileViewObject.setResultString("访问过于频繁，最近一小时访问次数超过"
+            + settingsRepository.findByName("visitTimes").getVal() + "次，无法继续访问");
         fileViewObject.setFlag(false);
       }
 
