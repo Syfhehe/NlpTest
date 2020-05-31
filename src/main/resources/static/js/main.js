@@ -66,6 +66,33 @@ define([ "jquery", "common/confirm_modal", ], function($, ConfirmModal) {
 			$('#fileDetailModal').on('hide.bs.modal', function() {
 				window.location.reload();
 			})
+			
+			$('#searchFileButton').on("click", function() {
+				var url, body;
+				url = contextPath + '/file/' + $('#fileNameInput').val();
+				$.ajax({
+					type : "GET",
+					url : url,
+					success : function(data, textStatus, jqXHR) {
+						console.log(data);	
+						var result = JSON.parse(data);
+						var tableLength = $("#fileTable tbody tr").length;
+						var arr = result.result.split(',');
+						for(var i = 1; i<=tableLength;i++){
+							var value = document.querySelector("body > div.container > div:nth-child(2) > table > tbody > tr:nth-child("+i+") > td:nth-child(2)").textContent;
+							if(arr.indexOf(value) ==-1){
+								$("#fileTable tr:eq("+i+")").attr("hidden","hidden");
+							}else{
+								$("#fileTable tr:eq("+i+")").removeAttr("hidden");
+							}
+						}
+						
+					},
+					error : function(data, textStatus, errorThrown) {
+						console.log(data.responseText);
+					}
+				});
+			});
 
 		});
 	});

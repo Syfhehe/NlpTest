@@ -16,5 +16,8 @@ public interface FileRepository extends JpaRepository<FileModel, Long> {
 
 	@Query("from FileModel f where f.fileName=:fileName")
 	List<FileModel> findFileByName(@Param("fileName") String fileName);
+	
+	@Query(value = "from FileModel t where t.fileName like %?1%")
+    List<FileModel> findFileByNameLike(String fileName);
 
 }

@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import sample.model.FileModel;
 import sample.model.UploadFileResponse;
-import sample.model.User;
 import sample.repository.FileRepository;
 import sample.repository.UserRepository;
 import sample.service.FileService;
@@ -22,6 +22,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
@@ -86,6 +87,23 @@ public class FileController {
     fileRepository.delete(id);
     JSONObject obj = new JSONObject();
     obj.put("result", "succeeded");
+    obj.put("status", "200");
+    String jsonText = obj.toString();
+    return jsonText;
+  }
+
+  @SuppressWarnings("unchecked")
+  @RequestMapping(value = "/file/{fileName}")
+  @ResponseBody
+  public String home(@PathVariable("fileName") String fileName) {
+    List<FileModel> fileModes = fileRepository.findFileByNameLike(fileName);
+    String a = "Begin";
+    for (FileModel f : fileModes) {
+      a += ",";
+      a += f.getFileName();
+    }
+    JSONObject obj = new JSONObject();
+    obj.put("result", a);
     obj.put("status", "200");
     String jsonText = obj.toString();
     return jsonText;

@@ -20,8 +20,27 @@
 
 	<div class="container">
 
+
 		<div>
-			<table class="table table-striped">
+			<form class="bs-example bs-example-form" role="form">
+				<div class="row">
+					<div class="col-lg-8">
+						<div class="input-group">
+							<input type="text" id="fileNameInput" class="form-control"></input> <span
+								class="input-group-btn">
+								<a class="btn btn-default" id="searchFileButton" type="button">搜索文件</a>
+							</span>
+						</div>
+						<!-- /input-group -->
+					</div>
+					<!-- /.col-lg-6 -->
+				</div>
+				<!-- /.row -->
+			</form>
+		</div>
+
+		<div>
+			<table id="fileTable" class="table table-striped">
 				<h3>文件列表</h3>
 				<thead>
 					<tr>
@@ -72,7 +91,8 @@
 		</div>
 
 
-		<div th:replace="fragments/footer :: footer(libs='fileUpload, main, profile')"></div>
+		<div
+			th:replace="fragments/footer :: footer(libs='fileUpload, main, profile')"></div>
 	</div>
 
 </body>
